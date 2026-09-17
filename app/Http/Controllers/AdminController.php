@@ -15,8 +15,8 @@ class AdminController extends Controller
         $totalSubscription = Subscription::where('status', 'active')->count();
         $totalValue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
             ->sum('plans.price');
-        $maxStorageLimit = $this->maxStorageLimit();
-        $usedStorage = $this->usedStorage();
+        $maxStorageLimit = $this->maxServerStorageLimit();
+        $usedStorage = $this->usedServerStorage();
         $getMostPopularPlan = $this->getMostPopularPlan();
         $subscriptions = Subscription::with('user', 'plan')->orderBy('created_at', 'desc')->latest()->get();
         return view('admin.index', compact('totalSubscription', 'totalValue', 'maxStorageLimit', 'usedStorage', 'getMostPopularPlan', 'subscriptions'));
@@ -79,5 +79,15 @@ class AdminController extends Controller
         return Plan::withCount('subscriptions')
             ->orderByDesc('subscriptions_count')
             ->first();
+    }
+    public function maxServerStorageLimit()
+    {
+        $maxStorageLimit = 1230;
+        return $maxStorageLimit;
+    }
+    public function usedServerStorage()
+    {
+        $usedStorage = 320;
+        return $usedStorage;
     }
 }

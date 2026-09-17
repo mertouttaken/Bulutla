@@ -469,7 +469,7 @@
           <span>→</span>
         </a>
         <a href="{{ route('plans.index') }}" class="action-row">
-          <span>📦 Planları Yönet & Yükselt</span>
+          <span>📦 Planını Yükselt</span>
           <span>→</span>
         </a>
         <a href="{{ route('subscriptions.show') }}" class="action-row">
