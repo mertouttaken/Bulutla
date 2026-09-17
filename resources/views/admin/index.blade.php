@@ -297,7 +297,7 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-header">
-            <span class="stat-title">Toplam Abone</span>
+            <span class="stat-title">Aktif Abone</span>
             <div class="stat-icon">👥</div>
           </div>
           <div class="stat-value">{{$totalSubscription}}</div>
@@ -365,24 +365,14 @@
             </tr>
           </thead>
           <tbody>
+            @foreach($subscriptions as $subscription)
             <tr>
-              <td>ahmet@example.com</td>
-              <td><span class="user-badge badge-plan">Pro</span></td>
+              <td>{{ $subscription->user->email ?? 'Bilinmiyor' }}</td>
+              <td><span class="user-badge badge-plan">{{ $subscription->plan->name ?? 'Bilinmiyor' }}</span></td>
               <td><span class="user-badge badge-active">Aktif</span></td>
-              <td>Bugün, 14:20</td>
+              <td>{{ $subscription->created_at ? \Carbon\Carbon::parse($subscription->created_at)->format('d M Y') : 'Bilinmiyor' }}</td>
             </tr>
-            <tr>
-              <td>mehmet@example.com</td>
-              <td><span class="user-badge badge-plan">Enterprise</span></td>
-              <td><span class="user-badge badge-active">Aktif</span></td>
-              <td>Dün, 09:15</td>
-            </tr>
-            <tr>
-              <td>ayse@example.com</td>
-              <td><span class="user-badge badge-plan">Free</span></td>
-              <td><span class="user-badge badge-active">Aktif</span></td>
-              <td>15 Eyl 2026</td>
-            </tr>
+            @endforeach
           </tbody>
         </table>
       </div>

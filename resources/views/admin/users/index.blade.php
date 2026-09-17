@@ -296,7 +296,7 @@
   <aside class="admin-sidebar">
     <div class="sidebar-brand">
       <span class="dot"></span>
-      <h2>Planla Admin</h2>
+      <h2>Bulutla Admin</h2>
     </div>
     <nav class="sidebar-nav">
       <ul>
@@ -319,25 +319,25 @@
     </header>
 
     <main class="admin-content">
-      <div class="filter-bar">
+      <form method="GET" action="{{ route('admin.users.index') }}" class="filter-bar">
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" class="search-input" placeholder="İsim veya e-posta ara...">
+          <input type="text" name="search" value="{{ request('search') }}" class="search-input" placeholder="İsim veya e-posta ara...">
         </div>
         <div class="filter-group">
-          <select class="filter-select">
+          <select class="filter-select" name="role" id="role-filter" onchange="this.form.submit()">
             <option value="">Rol: Tümü</option>
-            <option value="admin">Yönetici</option>
-            <option value="user">Standart Kullanıcı</option>
+            <option value="admin" @selected(request('role') === 'admin')>Yönetici</option>
+            <option value="user" @selected(request('role') === 'user')>Standart Kullanıcı</option>
           </select>
-          <select class="filter-select">
+          <select class="filter-select" name="plan" onchange="this.form.submit()">
             <option value="">Plan: Tümü</option>
             @foreach($plans as $plan)
-              <option value="{{ $plan->slug }}">{{ $plan->name }}</option>
+              <option value="{{ $plan->slug }}" @selected(request('plan') === $plan->slug)>{{ $plan->name }}</option>
             @endforeach
           </select>
         </div>
-      </div>
+      </form>
 
       <div class="panel-card">
         <table class="admin-table">
@@ -354,51 +354,74 @@
           </thead>
           <tbody>
             @foreach($users as $user)
-            <tr>
-              <td>
-                <div class="user-cell">
-                  <strong>{{ $user->name }}</strong>
-                  <span>{{ $user->email }}</span>
-                </div>
-              </td>
-              <td><span class="badge badge-{{ $user->is_admin ? 'admin' : 'user' }}">{{ $user->is_admin ? 'Yönetici' : 'Kullanıcı' }}</span></td>
-              <td>{{ $user->plan->name ?? 'Free' }}</td>
-              <td>
-                <div class="storage-progress">
-                  <div class="progress-track">
-                    @php
-                      $limit = (float) ($user->plan?->storage_limit ?? 0);
-                      $used = (float) $user->storageUsedValue();
+              @php
+                $roleFilter = request('role');
+                $planFilter = request('plan');
+                $searchFilter = request('search');
 
-                      $storagePercentage = $limit > 0 ? min(round(($used / $limit) * 100), 100) : 0;
-                    @endphp
-                    <div class="progress-fill" style="width: {{ $storagePercentage }}%;"></div>
-                  </div>
-                  <span class="storage-text">{{ $user->storageUsedFormatted() }} / {{ $user->plan?->storage_limit ?? '100' }}</span>
-                </div>
-              </td>
-              <td>
-                <div class="storage-progress">
-                  <div class="progress-track">
-                    @php
-                      $limit = (float) ($user->plan?->project_limit ?? 0);
-                      $used = (float) $user->projectUsedValue();
+                $matchesRole = empty($roleFilter) 
+                  || ($roleFilter === 'admin' && $user->is_admin) 
+                  || ($roleFilter === 'user' && !$user->is_admin);
 
-                      $projectPercentage = $limit > 0 ? min(round(($used / $limit) * 100), 100) : 0;
-                    @endphp
-                    <div class="progress-fill" style="width: {{ $projectPercentage }}%;"></div>
-                  </div>
-                  <span class="storage-text">{{ $user->projectUsedValue() }} / {{ $user->plan?->project_limit < 0 ? 'Sınırsız' : $user->plan?->project_limit ?? '0' }}</span>
-                </div>
-              </td>
-              <td>{{ $user->created_at->format('d M Y') }}</td>
-              <td>
-                <div class="table-actions">
-                  <button class="action-btn">Düzenle</button>
-                  <button class="action-btn danger">Engelle</button>
-                </div>
-              </td>
-            </tr>
+                $matchesPlan = empty($planFilter) 
+                  || ($user->plan?->slug === $planFilter);
+
+                $matchesSearch = empty($searchFilter) 
+                  || str_contains(strtolower($user->name), strtolower($searchFilter)) 
+                  || str_contains(strtolower($user->email), strtolower($searchFilter));
+              @endphp
+
+              @if($matchesRole && $matchesPlan && $matchesSearch)
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <strong>{{ $user->name }}</strong>
+                      <span>{{ $user->email }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge badge-{{ $user->is_admin ? 'admin' : 'user' }}">
+                      {{ $user->is_admin ? 'Yönetici' : 'Kullanıcı' }}
+                    </span>
+                  </td>
+                  <td>{{ $user->plan?->name ?? 'Free' }}</td>
+                  <td>
+                    <div class="storage-progress">
+                      <div class="progress-track">
+                        @php
+                          $limit = (float) ($user->plan?->storage_limit ?? 0);
+                          $used = (float) $user->storageUsedValue();
+                          $storagePercentage = $limit > 0 ? min(round(($used / $limit) * 100), 100) : 0;
+                        @endphp
+                        <div class="progress-fill" style="width: {{ $storagePercentage }}%;"></div>
+                      </div>
+                      <span class="storage-text">{{ $user->storageUsedFormatted() }} / {{ $user->plan?->storage_limit ?? '100' }} MB</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="storage-progress">
+                      <div class="progress-track">
+                        @php
+                          $projLimit = (int) ($user->plan?->project_limit ?? 0);
+                          $projUsed = (int) $user->projectUsedValue();
+                          $projectPercentage = $projLimit > 0 ? min(round(($projUsed / $projLimit) * 100), 100) : 0;
+                        @endphp
+                        <div class="progress-fill" style="width: {{ $projectPercentage }}%;"></div>
+                      </div>
+                      <span class="storage-text">
+                        {{ $projUsed }} / {{ $projLimit <= 0 ? 'Sınırsız' : $projLimit }}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{{ $user->created_at?->format('d M Y') }}</td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn">Düzenle</button>
+                      <button class="action-btn danger">Engelle</button>
+                    </div>
+                  </td>
+                </tr>
+              @endif
             @endforeach
           </tbody>
         </table>

@@ -12,13 +12,14 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $totalSubscription = Subscription::count();
+        $totalSubscription = Subscription::where('status', 'active')->count();
         $totalValue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
             ->sum('plans.price');
         $maxStorageLimit = $this->maxStorageLimit();
         $usedStorage = $this->usedStorage();
         $getMostPopularPlan = $this->getMostPopularPlan();
-        return view('admin.index', compact('totalSubscription', 'totalValue', 'maxStorageLimit', 'usedStorage', 'getMostPopularPlan'));
+        $subscriptions = Subscription::with('user', 'plan')->orderBy('created_at', 'desc')->latest()->get();
+        return view('admin.index', compact('totalSubscription', 'totalValue', 'maxStorageLimit', 'usedStorage', 'getMostPopularPlan', 'subscriptions'));
     }
     public function plans_index()
     {
@@ -39,7 +40,8 @@ class AdminController extends Controller
     public function indexOfSubscriptions()
     {
         $subscriptions = Subscription::with('user', 'plan')->get();
-        return view('admin.subscriptions.index', compact('subscriptions'));
+        $plans = Plan::orderBy('sort_order', 'asc')->get();
+        return view('admin.subscriptions.index', compact('subscriptions'), compact('plans'));
     }
     public function store(PlanRequest $request)
     {

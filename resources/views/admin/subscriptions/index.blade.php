@@ -268,6 +268,7 @@
     border-radius: 6px;
     font-size: 0.78rem;
     cursor: pointer;
+    text-decoration: none;
     transition: all 0.2s;
   }
 
@@ -276,7 +277,7 @@
     color: #fff;
   }
 
-  .action-btn.cancel:hover {
+  .action-btn.btn-danger:hover {
     background: rgba(239, 68, 68, 0.15);
     border-color: rgba(239, 68, 68, 0.3);
     color: #fca5a5;
@@ -310,25 +311,25 @@
     </header>
 
     <main class="admin-content">
-      <div class="filter-bar">
+      <form method="GET" action="{{ route('admin.subscriptions.index') }}" class="filter-bar">
         <div class="search-box">
           <span class="search-icon">🔍</span>
-          <input type="text" class="search-input" placeholder="Kullanıcı veya e-posta ara...">
+          <input type="text" name="search" value="{{ request('search') }}" class="search-input" placeholder="Kullanıcı veya e-posta ara...">
         </div>
         <div class="filter-group">
-          <select class="filter-select">
+          <select class="filter-select" name="plan" onchange="this.form.submit()">
             <option value="">Tüm Planlar</option>
-            <option value="free">Free</option>
-            <option value="pro">Pro</option>
-            <option value="enterprise">Enterprise</option>
+            @foreach($plans as $plan)
+              <option value="{{ $plan->slug }}" @selected(request('plan') === $plan->slug)>{{ $plan->name }}</option>
+            @endforeach
           </select>
-          <select class="filter-select">
+          <select class="filter-select" name="status" onchange="this.form.submit()">
             <option value="">Durum: Tümü</option>
-            <option value="active">Aktif</option>
-            <option value="cancelled">İptal Edilmiş</option>
+            <option value="active" @selected(request('status') === 'active')>Aktif</option>
+            <option value="cancelled" @selected(request('status') === 'cancelled')>İptal Edilmiş</option>
           </select>
         </div>
-      </div>
+      </form>
 
       <div class="panel-card">
         <table class="admin-table">
@@ -344,22 +345,40 @@
           </thead>
           <tbody>
             @foreach($subscriptions as $subscription)
-              @if($subscription->plan->price > 0)
+              @php
+                $statusFilter = request('status');
+                $planFilter = request('plan');
+                $searchFilter = request('search');
+
+                $subscriber = $subscription->user;
+                $plan = $subscription->plan;
+
+                $matchesStatus = empty($statusFilter) || $subscription->status === $statusFilter;
+                $matchesPlan = empty($planFilter) || ($plan?->slug === $planFilter);
+
+                $matchesSearch = empty($searchFilter) 
+                  || ($subscriber && (
+                      str_contains(mb_strtolower($subscriber->name), mb_strtolower($searchFilter)) 
+                      || str_contains(mb_strtolower($subscriber->email), mb_strtolower($searchFilter))
+                  ));
+              @endphp
+
+              @if($matchesStatus && $matchesPlan && $matchesSearch && ($plan?->price ?? 0) > 0)
                 <tr>
                   <td>
                     <div class="user-cell">
-                      <strong>{{ $subscription->user->name ?? 'Bilinmiyor' }}</strong>
-                      <span>{{ $subscription->user->email ?? 'Bilinmiyor' }}</span>
+                      <strong>{{ $subscriber->name ?? 'Bilinmiyor' }}</strong>
+                      <span>{{ $subscriber->email ?? 'Bilinmiyor' }}</span>
                     </div>
                   </td>
-                  @php
-                    $plan = $subscription->plan;
-                    $class = 'badge badge-' . ($subscription->status === 'active' ? 'active' : 'cancelled');
-                  @endphp
                   <td><span class="badge badge-plan">{{ $plan?->name }}</span></td>
-                  <td><span class="{{ $class }}">● {{ $subscription->status === 'active' ? 'Aktif' : 'İptal Edilmiş' }}</span></td>
+                  <td>
+                    <span class="badge badge-{{ $subscription->status === 'active' ? 'active' : 'cancelled' }}">
+                      ● {{ $subscription->status === 'active' ? 'Aktif' : 'İptal Edilmiş' }}
+                    </span>
+                  </td>
                   <td>{{ $plan?->price }} ₺ / ay</td>
-                  <td>{{ $subscription->ends_at ?? 'Bilinmiyor' }}</td>
+                  <td>{{ $subscription->ends_at ? \Carbon\Carbon::parse($subscription->ends_at)->format('d M Y') : 'Bilinmiyor' }}</td>
                   <td>
                     <div class="table-actions">
                       <a href="{{ route('admin.subscriptions.show', $subscription->id) }}" class="action-btn">Detay</a>
@@ -367,7 +386,7 @@
                       @if($subscription->status === 'active')
                         <form action="{{ route('admin.subscriptions.cancel', $subscription->id) }}" method="POST" onsubmit="return confirm('Aboneliği iptal etmek istediğinize emin misiniz?');">
                           @csrf
-                          @method('DELETE')
+                          @method('POST')
                           <button type="submit" class="action-btn btn-danger">İptal Et</button>
                         </form>
                       @else
