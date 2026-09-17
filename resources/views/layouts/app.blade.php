@@ -189,7 +189,9 @@
     <ul class="nav-links">
       <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Ana Sayfa</a></li>
       <li><a href="{{ route('plans.index') }}" class="{{ request()->routeIs('plans.*') ? 'active' : '' }}">Planlar</a></li>
-      <li><a href="{{ route('subscriptions.show') }}" class="{{ request()->routeIs('subscriptions.*') ? 'active' : '' }}">Aboneliğim</a></li>
+      @auth
+        <li><a href="{{ route('subscriptions.show') }}" class="{{ request()->routeIs('subscriptions.*') ? 'active' : '' }}">Aboneliğim</a></li>
+      @endauth
     </ul>
     <div class="nav-cta">
         @auth

@@ -9,11 +9,8 @@ use App\Http\Controllers\DashboardController;
 
 Route::view('/', 'home');
 
-Route::view('/home', 'home')->name('home');
+Route::get('/home', [DashboardController::class, 'index'])->name('home');
 Route::get('/plans', [UserController::class, 'plans_index'])->name('plans.index');
-Route::view('/subscriptions/show', 'subscriptions.show')->name('subscriptions.show');
-Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
-
 Route::middleware('guest')->group(function () {
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login-process',  [AuthController::class, 'loginUser'])->name('login-process');
@@ -22,6 +19,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::view('/subscriptions/show', 'subscriptions.show')->name('subscriptions.show');
+    Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/change-plan', [SubscriptionController::class, 'changeUserPlan'])->name('change-plan');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
