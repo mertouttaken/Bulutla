@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/change-plan', [SubscriptionController::class, 'changeUserPlan'])->name('change-plan');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'indexofDashboard'])->name('dashboard');
     Route::post('/dashboard/files/upload', [DashboardController::class, 'index'])->name('files.upload');
 });
 

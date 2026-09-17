@@ -80,14 +80,4 @@ class AdminController extends Controller
             ->orderByDesc('subscriptions_count')
             ->first();
     }
-    public function maxStorageLimit()
-    {
-        $maxStorageLimit = 1230;
-        return $maxStorageLimit;
-    }
-    public function usedStorage()
-    {
-        $usedStorage = 320;
-        return $usedStorage;
-    }
 }

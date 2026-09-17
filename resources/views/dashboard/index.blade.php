@@ -345,13 +345,21 @@
 
 @php
   $user = Auth::user();
-  $rawUsedStorage = (float) ($user->used_storage ?? 0);
-  $storageLimit = (float) ($user->plan?->storage_limit ?? 100);
-  $storagePercent = $storageLimit > 0 ? min(round(($rawUsedStorage / $storageLimit) * 100), 100) : 0;
+  $rawUsed = Auth::user()->storageUsed();
+  $usedValue = (float) $rawUsed;
+  $storageUsed = str_contains($rawUsed, 'GB') ? $usedValue * 1024 : $usedValue;
 
-  $projectUsed = (int) ($user->projectUsed() ?? 0);
-  $projectLimit = (int) ($user->plan?->projectLimit() ?? 1);
-  $projectPercent = $projectLimit > 0 ? min(round(($projectUsed / $projectLimit) * 100), 100) : 0;
+
+  $rawLimit = Auth::user()->plan?->storageLimit() ?? '0';
+  $limitValue = (float) $rawLimit;
+  $storageLimit = (float) str_contains($rawLimit, 'GB') ? $limitValue * 1024 : $limitValue;
+
+  $projectUsed = Auth::user()->projectUsedValue() ?? 0;
+  $projectLimit = Auth::user()->plan?->projectLimit() ?? 0;
+
+  $projectPercent = $projectLimit > 0 ? ($projectUsed / $projectLimit) * 100 : 0;
+
+  $storagePercent = $storageLimit > 0 ? ($storageUsed / $storageLimit) * 100 : 0;
 @endphp
 
 <div class="dashboard-container">
@@ -378,12 +386,12 @@
         <span class="metric-title">Depolama Durumu</span>
         <span class="metric-badge">%{{ $storagePercent }} Dolu</span>
       </div>
-      <p class="metric-value">{{ $rawUsedStorage }} <small>/ {{ $storageLimit }} MB</small></p>
+      <p class="metric-value">{{ $rawUsed }} <small>/ {{ $storageLimit }} MB</small></p>
       <div class="metric-progress">
         <div class="metric-progress-fill" style="width: {{ $storagePercent }}%;"></div>
       </div>
       <div class="metric-footer">
-        <span>Kalan: {{ max(0, $storageLimit - $rawUsedStorage) }} MB</span>
+        <span>Kalan: {{ max(0, $storageLimit - $storageUsed) }} MB</span>
         <a href="{{ route('plans.index') }}">Yükselt</a>
       </div>
     </div>
