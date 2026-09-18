@@ -9,7 +9,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('home');
-Route::get('/home', [DashboardController::class, 'index'])->name('home');
 Route::get('/plans', [UserController::class, 'plans_index'])->name('plans.index');
 
 Route::middleware('guest')->group(function () {
@@ -22,7 +21,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::view('/subscriptions/show', 'subscriptions.show')->name('subscriptions.show');
     Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/change-plan', [SubscriptionController::class, 'changeUserPlan'])->name('change-plan');
     Route::get('/dashboard', [DashboardController::class, 'indexofDashboard'])->name('dashboard');
     Route::post('/dashboard/files/upload', [FileController::class, 'upload'])->name('files.upload');

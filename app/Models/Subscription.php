@@ -6,9 +6,13 @@ use App\Models\User;
 use App\Models\Plan;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Prunable;
 
 class Subscription extends Model
 {
+    use Prunable;
+
     protected $table = 'subscriptions';
 
     protected $fillable = [
@@ -29,5 +33,10 @@ class Subscription extends Model
     public function nextBillingDate()
     {
         return $this->ends_at ? \Carbon\Carbon::parse($this->ends_at)->format('d.m.Y') : 'Süresiz';
+    }
+    public function prunable(): Builder
+    {
+        return static::where('status', '!=', 'active')
+            ->where('ends_at', '<=', now()->subDays(30));
     }
 }

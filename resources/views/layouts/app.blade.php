@@ -228,7 +228,12 @@
                 <a href="{{ route('admin.index') }}" class="btn btn-admin btn-sm">Admin Paneli</a>
             @endif
             <a href="{{ route('dashboard') }}" class="btn btn-panel btn-sm">Panel</a>
-            <a href="{{ route('logout') }}" class="btn btn-ghost btn-sm">Çıkış yap</a>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit" class="btn btn-ghost btn-sm">
+                    Çıkış yap
+                </button>
+            </form>
         @endauth
 
         @guest

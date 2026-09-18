@@ -8,9 +8,12 @@ use App\Models\Subscription;
 use App\Models\Plan;
 use App\Models\Project;
 use App\Models\File;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
+    
     protected $table = 'users';
 
     protected $fillable = [

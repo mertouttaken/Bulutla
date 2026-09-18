@@ -33,4 +33,11 @@ class Plan extends Model
     {
         return $this->slug === 'free';
     }
+    public static function getMostPopularPlan()
+    {
+        return Plan::where('is_default', 0)
+            ->withCount('subscriptions')
+            ->orderByDesc('subscriptions_count')
+            ->first();
+    }
 }

@@ -8,12 +8,12 @@ use App\Models\Subscription;
 use App\Models\User;
 use App\Models\File as FileModel;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function index()
     {
-        $mostPopularPlan = $this->getMostPopularPlan();
+        $mostPopularPlan = Plan::getMostPopularPlan();
         $plans = Plan::orderBy('sort_order', 'asc')->get();
         return view('home', compact('mostPopularPlan', 'plans'));
     }
@@ -22,14 +22,6 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $subscription = $user->subscription;
-
-        $userFiles = $user->files()->get();
-
-        foreach ($userFiles as $fileRecord) {
-            if (!Storage::disk('local')->exists($fileRecord->path)) {
-                $fileRecord->delete();
-            }
-        }
 
         $usedStorage = $user->storageUsedValue();
         $maxStorageLimit = $subscription?->plan?->storage_limit ?? 0;
@@ -51,13 +43,5 @@ class DashboardController extends Controller
             'recentFiles',
             'files'
         ));
-    }
-
-    public function getMostPopularPlan()
-    {
-        return Plan::where('is_default', 0)
-            ->withCount('subscriptions')
-            ->orderByDesc('subscriptions_count')
-            ->first();
     }
 }

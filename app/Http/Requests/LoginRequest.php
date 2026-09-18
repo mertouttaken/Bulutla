@@ -14,7 +14,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
             'password' => 'required',
         ];
     }
@@ -24,7 +24,6 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'Email alanı zorunludur.',
             'email.email' => 'Geçerli bir email adresi giriniz.',
-            'email.exists' => 'Bu email adresi kayıtlı değil.',
             'password.required' => 'Şifre alanı zorunludur.',
         ];
     }

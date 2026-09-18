@@ -2,6 +2,38 @@
 
 @section('content')
 <style>
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes loadBar {
+    0% { width: 0%; }
+    100% { width: var(--bar-fill); }
+  }
+  .fill-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #5f1587, #c084fc);
+    border-radius: 99px;
+    animation: loadBar 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
   .subscription-wrapper {
     min-height: 85vh;
     padding: 60px 0 100px;
@@ -239,6 +271,12 @@
     font-weight: 600;
     color: #ffffff;
   }
+  .hero-left {
+    flex: 1 1 55%;
+    min-width: 0;
+    animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+  }
 </style>
 
 @php
@@ -270,72 +308,74 @@
       <a href="{{ route('plans.index') }}" class="btn-change-plan">Planı Değiştir →</a>
     </div>
 
-    <div class="sub-grid">
+    <div class="hero-left">
       <!-- Kullanım & Mevcut Plan -->
-      <div class="sub-card">
-        <h3>Plan & Kullanım</h3>
-        
-        <div class="current-plan-box">
-          <div>
-            <div class="plan-name-txt">{{ $plan?->name ?? 'Başlangıç' }} Planı</div>
-            <div class="plan-price-txt">{{ number_format($plan?->price ?? 0, 2, ',', '.') }} ₺ / ay</div>
+      <div class="sub-grid">
+        <div class="sub-card">
+          <h3>Plan & Kullanım</h3>
+          
+          <div class="current-plan-box">
+            <div>
+              <div class="plan-name-txt">{{ $plan?->name ?? 'Default' }}</div>
+              <div class="plan-price-txt">{{ number_format($plan?->price ?? 0, 2, ',', '.') }} ₺ / ay</div>
+            </div>
+            <span class="status-pill">{{ $subscription?->status === 'active' ? 'Aktif' : 'Standart' }}</span>
           </div>
-          <span class="status-pill">{{ $subscription?->status === 'active' ? 'Aktif' : 'Standart' }}</span>
+
+          <div class="usage-block">
+            <div class="usage-item">
+              <div class="usage-info">
+                <span>Depolama Alanı</span>
+                <span><strong>{{ $storageUsed }} MB</strong> / {{ $storageLimit }} MB</span>
+              </div>
+              <div class="usage-track">
+                <div class="fill-bar" style="--bar-fill: {{ $storagePercent }}%;"></div>
+              </div>
+            </div>
+
+            <div class="usage-item">
+              <div class="usage-info">
+                <span>Aktif Projeler</span>
+                <span><strong>{{ $projectUsed }}</strong> / {{ $projectLimit > 0 ? $projectLimit : 'Sınırsız' }}</span>
+              </div>
+              <div class="usage-track">
+                <div class="fill-bar" style="--bar-fill: {{ $projectPercentage }}%;"></div>
+              </div>
+            </div>
+          </div>
+
+          @if($user->subscription && $user->subscription->status === 'active' && !$user->subscription->plan->isDefault())
+            <div class="danger-box">
+              <p>Aboneliğinizi iptal ettiğinizde mevcut fatura dönemi bitiminde hesabınız otomatik olarak Free plana geçirilir.</p>
+              <form method="POST" action="{{ route('subscriptions.cancel') }}" onsubmit="return confirm('Aboneliğinizi iptal etmek istediğinize emin misiniz?');">
+                @csrf
+                <button type="submit" class="btn-cancel">Aboneliği İptal Et</button>
+              </form>
+            </div>
+          @endif
         </div>
 
-        <div class="usage-block">
-          <div class="usage-item">
-            <div class="usage-info">
-              <span>Depolama Alanı</span>
-              <span><strong>{{ $storageUsed }} MB</strong> / {{ $storageLimit }} MB</span>
+        <!-- Fatura Geçmişi -->
+        <div class="sub-card">
+          <h3>Fatura Geçmişi</h3>
+          
+          <div class="invoice-list">
+            <div class="invoice-item">
+              <span>14 Eylül 2026</span>
+              <span class="invoice-amount">199,00 ₺</span>
             </div>
-            <div class="usage-track">
-              <div class="usage-fill" style="width: {{ $storagePercent }}%;"></div>
+            <div class="invoice-item">
+              <span>14 Ağustos 2026</span>
+              <span class="invoice-amount">199,00 ₺</span>
             </div>
-          </div>
-
-          <div class="usage-item">
-            <div class="usage-info">
-              <span>Aktif Projeler</span>
-              <span><strong>{{ $projectUsed }}</strong> / {{ $projectLimit > 0 ? $projectLimit : 'Sınırsız' }}</span>
+            <div class="invoice-item">
+              <span>14 Temmuz 2026</span>
+              <span class="invoice-amount">199,00 ₺</span>
             </div>
-            <div class="usage-track">
-              <div class="usage-fill" style="width: {{ $projectPercentage }}%;"></div>
+            <div class="invoice-item">
+              <span>14 Haziran 2026</span>
+              <span class="invoice-amount" style="color: #94a3b8;">0,00 ₺ (Deneme)</span>
             </div>
-          </div>
-        </div>
-
-        @if($user->subscription && $user->subscription->status === 'active' && !$user->subscription->plan->isDefault())
-          <div class="danger-box">
-            <p>Aboneliğinizi iptal ettiğinizde mevcut fatura dönemi bitiminde hesabınız otomatik olarak Free plana geçirilir.</p>
-            <form method="POST" action="{{ route('subscriptions.cancel') }}" onsubmit="return confirm('Aboneliğinizi iptal etmek istediğinize emin misiniz?');">
-              @csrf
-              <button type="submit" class="btn-cancel">Aboneliği İptal Et</button>
-            </form>
-          </div>
-        @endif
-      </div>
-
-      <!-- Fatura Geçmişi -->
-      <div class="sub-card">
-        <h3>Fatura Geçmişi</h3>
-        
-        <div class="invoice-list">
-          <div class="invoice-item">
-            <span>14 Eylül 2026</span>
-            <span class="invoice-amount">199,00 ₺</span>
-          </div>
-          <div class="invoice-item">
-            <span>14 Ağustos 2026</span>
-            <span class="invoice-amount">199,00 ₺</span>
-          </div>
-          <div class="invoice-item">
-            <span>14 Temmuz 2026</span>
-            <span class="invoice-amount">199,00 ₺</span>
-          </div>
-          <div class="invoice-item">
-            <span>14 Haziran 2026</span>
-            <span class="invoice-amount" style="color: #94a3b8;">0,00 ₺ (Deneme)</span>
           </div>
         </div>
       </div>

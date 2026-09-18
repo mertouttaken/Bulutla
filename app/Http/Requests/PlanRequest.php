@@ -24,7 +24,7 @@ class PlanRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:plans,slug',
             'price' => 'required|numeric|min:0',
             'storage_limit' => 'nullable|string',
             'project_limit' => 'nullable|integer',

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('is_admin')->default('0');
+            $table->boolean('is_admin')->default('0');
             $table->string('stripe_id')->nullable();
             $table->string('pm_type')->nullable();
             $table->timestamps();

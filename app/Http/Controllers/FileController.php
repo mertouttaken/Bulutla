@@ -17,10 +17,6 @@ class FileController extends Controller
 
         $user = $request->user();
 
-        if (!$user) {
-            return back()->with('error', 'Oturum açmanız gerekiyor.');
-        }
-
         $subscription = $user->subscription;
         if (!$subscription || $subscription->status !== 'active') {
             return back()->with('error', 'Dosya yüklemek için aktif bir aboneliğiniz olmalıdır.');

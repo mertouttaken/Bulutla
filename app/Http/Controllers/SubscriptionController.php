@@ -10,6 +10,11 @@ class SubscriptionController extends Controller
 {
     public function updateSubscription(Request $request, $subscriptionId)
     {
+        request()->validate([
+            'plan_id' => 'required|exists:plans,id',
+            'status'  => 'required|in:active,cancelled',
+            'ends_at' => 'nullable|date',
+        ]);
         $subscription = Subscription::findOrFail($subscriptionId);
 
         $subscription->update([

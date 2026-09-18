@@ -8,6 +8,7 @@ use App\Models\Project;
 
 class File extends Model
 {
+
     protected $fillable = [
         'project_id',
         'user_id',

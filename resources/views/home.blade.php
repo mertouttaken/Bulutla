@@ -426,7 +426,6 @@
 </style>
 
 <div class="landing-page">
-  <!-- Hero -->
   <section class="landing-hero">
     <div class="landing-wrap">
       <div class="hero-flex">

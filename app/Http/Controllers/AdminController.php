@@ -20,7 +20,7 @@ class AdminController extends Controller
             ->sum('plans.price');
         $maxStorageLimit = $this->maxServerStorageLimit();
         $usedStorage = $this->usedServerStorage();
-        $getMostPopularPlan = $this->getMostPopularPlan();
+        $getMostPopularPlan = Plan::getMostPopularPlan();
         $subscriptions = Subscription::with('user', 'plan')->orderBy('created_at', 'desc')->latest()->get();
         return view('admin.index', compact('totalSubscription', 'totalValue', 'maxStorageLimit', 'usedStorage', 'getMostPopularPlan', 'subscriptions'));
     }
@@ -44,7 +44,7 @@ class AdminController extends Controller
     {
         $subscriptions = Subscription::with('user', 'plan')->get();
         $plans = Plan::orderBy('sort_order', 'asc')->get();
-        return view('admin.subscriptions.index', compact('subscriptions'), compact('plans'));
+        return view('admin.subscriptions.index', compact('subscriptions', 'plans'));
     }
     public function store(PlanRequest $request)
     {
@@ -68,22 +68,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.plans.actions');
     }
-    public function patchID($currentID, $targetID)
-    {
-        Plan::where('id', $currentID)->update([
-            'id' => $targetID,
-        ]);
-        Plan::where('id', $targetID)->update([
-            'id' => $currentID,
-        ]);
-    }
-    public function getMostPopularPlan()
-    {
-        return Plan::where('is_default', 0)
-            ->withCount('subscriptions')
-            ->orderByDesc('subscriptions_count')
-            ->first();
-    }
     public function maxServerStorageLimit()
     {
         $maxStorageLimit = round(disk_total_space(storage_path()) / 1024 / 1024 / 1024, 2);
@@ -91,7 +75,7 @@ class AdminController extends Controller
     }
     public function usedServerStorage()
     {
-        $usedStorage = round(FileModel::all()->sum('size') / 1024 / 1024 / 1024, 2);  
+        $usedStorage = round(FileModel::lazy()->sum('size') / 1024 / 1024 / 1024, 2);  
         return $usedStorage;
     }
 }

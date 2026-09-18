@@ -22,9 +22,9 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'mail.required' => 'Email alanı zorunludur.',
-            'mail.email' => 'Geçerli bir email adresi giriniz.',
-            'mail.exists' => 'Bu email adresi kayıtlı değil.',
+            'email.required' => 'Email alanı zorunludur.',
+            'email.email' => 'Geçerli bir email adresi giriniz.',
+            'email.unique' => 'Bu email adresi zaten kayıtlı.',
             'password.required' => 'Şifre alanı zorunludur.',
         ];
     }

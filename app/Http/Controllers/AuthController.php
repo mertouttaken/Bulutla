@@ -14,14 +14,13 @@ class AuthController extends Controller
 {
     public function loginUser(LoginRequest $request)
     {
-        $user = User::where('email', request('email'))->first();
-        if($user && password_verify(request('password'), $user->password)) {
-            Auth::login($user);
-            return redirect('home');
-        } else {
-            return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
+        if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            return redirect()->intended(route('home'));
         }
+
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
     }
+
     public function registerUser(RegisterRequest $request)
     {
         $user = User::create([
@@ -40,15 +39,18 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+        $request->session()->regenerate();
 
-        return redirect('home');
+        return redirect()->route('home');
     }
+
     public function logout(Request $request)
     {
-        if (Auth::check()) {
-            Auth::logout();
-        }
+        Auth::logout();
 
-        return redirect('/');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home');
     }
 }
