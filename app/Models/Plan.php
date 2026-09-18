@@ -29,4 +29,8 @@ class Plan extends Model
     {
         return (int) ($this->project_limit ?? 1);
     }
+    public function isDefault(): bool
+    {
+        return $this->slug === 'free';
+    }
 }

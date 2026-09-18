@@ -6,9 +6,9 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FileController;
 
-Route::view('/', 'home');
-
+Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::get('/home', [DashboardController::class, 'index'])->name('home');
 Route::get('/plans', [UserController::class, 'plans_index'])->name('plans.index');
 Route::middleware('guest')->group(function () {
@@ -24,7 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/change-plan', [SubscriptionController::class, 'changeUserPlan'])->name('change-plan');
     Route::get('/dashboard', [DashboardController::class, 'indexofDashboard'])->name('dashboard');
-    Route::post('/dashboard/files/upload', [DashboardController::class, 'index'])->name('files.upload');
+    Route::post('/dashboard/files/upload', [FileController::class, 'upload'])->name('files.upload');
+    Route::get('/dashboard/files/download/{fileId}', [FileController::class, 'download'])->name('files.download');
+    Route::delete('/dashboard/files/destroy/{fileId}', [FileController::class, 'destroy'])->name('files.destroy');
 });
 
 Route::middleware('admin')->group(function () {

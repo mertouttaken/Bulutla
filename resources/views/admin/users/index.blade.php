@@ -389,13 +389,20 @@
                     <div class="storage-progress">
                       <div class="progress-track">
                         @php
-                          $limit = (float) ($user->plan?->storage_limit ?? 0);
+                          $rawLimit = (string) ($user->plan?->storageLimit() ?? $user->plan?->storage_limit ?? '0');
+                          preg_match('/([\d.]+)\s*([a-zA-Z]*)/', $rawLimit, $matches);
+
+                          $limitVal = isset($matches[1]) ? (float) $matches[1] : 0;
+                          $limitUnit = isset($matches[2]) ? strtoupper(trim($matches[2])) : 'MB';
+
+                          $limit = ($limitUnit === 'GB') ? ($limitVal * 1024) : $limitVal;
+
                           $used = (float) $user->storageUsedValue();
                           $storagePercentage = $limit > 0 ? min(round(($used / $limit) * 100), 100) : 0;
                         @endphp
                         <div class="progress-fill" style="width: {{ $storagePercentage }}%;"></div>
                       </div>
-                      <span class="storage-text">{{ $user->storageUsedFormatted() }} / {{ $user->plan?->storage_limit ?? '100' }} MB</span>
+                      <span class="storage-text">{{ $user->storageUsedFormatted() }} / {{ $user->plan?->storage_limit ?? '100' }}</span>
                     </div>
                   </td>
                   <td>

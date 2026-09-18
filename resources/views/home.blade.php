@@ -37,7 +37,7 @@
                 <span>{{ Auth::user()->storageUsedFormatted() }} / {{ Auth::user()->plan?->storageLimit() ?? '100 MB' }}</span>
               </div>
               @php
-                $rawUsed = (string) Auth::user()->storageUsed();
+                $rawUsed = (string) Auth::user()->storageUsedValue();
                 $usedValue = (float) $rawUsed;
                 $storageUsed = str_contains($rawUsed, 'GB') ? $usedValue * 1024 : $usedValue;
 

@@ -223,96 +223,110 @@
     margin: 0;
   }
 
-  .panel-header a {
+  .file-card-btn {
     color: #c084fc;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
     text-decoration: none;
-    font-weight: 500;
+    transition: color 0.2s ease;
   }
 
-  .panel-header a:hover {
-    text-decoration: underline;
+  .file-card-btn:hover {
+    color: #e9d5ff;
   }
 
-  .files-stack {
+  .file-download-btn {
+    color: #c084fc;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+
+  .file-download-btn:hover {
+    color: #ffffff;
+    background: rgba(192, 132, 252, 0.15);
+    transform: translateY(-1px);
+  }
+  .file-destroy-btn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  .file-destroy-btn:hover {
+    color: #ffffff;
+    background: rgba(239, 68, 68, 0.18);
+    transform: translateY(-1px);
+  }
+
+  .file-card-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
-  .file-item-card {
+  .file-item {
     background: #17182e;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 13px 18px;
+    padding: 14px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     transition: all 0.2s ease;
   }
-
-  .file-item-card:hover {
+  .file-item:hover {
     border-color: rgba(139, 30, 196, 0.35);
     background: #1a1b35;
   }
 
-  .file-meta-group {
+  .file-name {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .file-actions-group {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+  .file-size {
+    color: #94a3b8;
+    font-size: 0.82rem;
+    min-width: 75px;
+    text-align: right;
   }
 
-  .file-icon-box {
-    width: 38px;
-    height: 38px;
-    background: rgba(95, 21, 135, 0.16);
-    border: 1px solid rgba(139, 30, 196, 0.25);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.15rem;
-  }
-
-  .file-texts {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .file-name-text {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #ffffff;
-  }
-
-  .file-info-text {
-    font-size: 0.75rem;
-    color: #9d9bb8;
-  }
-
-  .file-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    color: #cbd5e1;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .file-btn:hover {
-    background: rgba(95, 21, 135, 0.2);
-    border-color: rgba(139, 30, 196, 0.4);
-    color: #ffffff;
-  }
-
-  .no-data-box {
+  .file-card-empty {
+    padding: 50px 16px;
     text-align: center;
-    padding: 38px 16px;
     color: #64748b;
     font-size: 0.85rem;
+  }
+
+  .file-card-empty p {
+    margin: 0;
   }
 
   .actions-list {
@@ -345,21 +359,22 @@
 
 @php
   $user = Auth::user();
-  $rawUsed = Auth::user()->storageUsed();
-  $usedValue = (float) $rawUsed;
-  $storageUsed = str_contains($rawUsed, 'GB') ? $usedValue * 1024 : $usedValue;
 
+  $storageUsed = $user->storageUsedValue();
 
-  $rawLimit = Auth::user()->plan?->storageLimit() ?? '0';
-  $limitValue = (float) $rawLimit;
-  $storageLimit = (float) str_contains($rawLimit, 'GB') ? $limitValue * 1024 : $limitValue;
+  $rawLimit = (string) ($user->plan?->storageLimit() ?? $user->plan?->storage_limit ?? '0');
+  preg_match('/([\d.]+)\s*([a-zA-Z]*)/', $rawLimit, $matches);
 
-  $projectUsed = Auth::user()->projectUsedValue() ?? 0;
-  $projectLimit = Auth::user()->plan?->projectLimit() ?? 0;
+  $limitValue = isset($matches[1]) ? (float) $matches[1] : 0;
+  $limitUnit = isset($matches[2]) ? strtoupper(trim($matches[2])) : 'MB';
 
-  $projectPercent = $projectLimit > 0 ? ($projectUsed / $projectLimit) * 100 : 0;
+  $storageLimit = ($limitUnit === 'GB') ? ($limitValue * 1024) : $limitValue;
 
-  $storagePercent = $storageLimit > 0 ? ($storageUsed / $storageLimit) * 100 : 0;
+  $storagePercent = $storageLimit > 0 ? min(100, round(($storageUsed / $storageLimit) * 100)) : 0;
+
+  $projectUsed = $user->projectUsedValue();
+  $projectLimit = (int) ($user->plan?->projectLimit() ?? $user->plan?->project_limit ?? 0);
+  $projectPercent = $projectLimit > 0 ? min(100, round(($projectUsed / $projectLimit) * 100)) : 0;
 @endphp
 
 <div class="dashboard-container">
@@ -371,9 +386,11 @@
     </div>
 
     <div class="header-actions">
-      <a href="{{ route('files.upload') }}" class="btn-cta-primary">
-        <span>+</span> Dosya Yükle
-      </a>
+      <form action="{{ route('files.upload') }}" method="post" class="btn-cta-primary" enctype="multipart/form-data" id="quickUploadForm">
+        @csrf
+        <label for="fileInput" class="file-card-btn" style="color: white;">+ Dosya Yükle</label>
+        <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
+      </form>
       <a href="{{ route('plans.index') }}" class="btn-cta-secondary">
         Planları İncele
       </a>
@@ -386,7 +403,7 @@
         <span class="metric-title">Depolama Durumu</span>
         <span class="metric-badge">%{{ $storagePercent }} Dolu</span>
       </div>
-      <p class="metric-value">{{ $rawUsed }} <small>/ {{ $storageLimit }} MB</small></p>
+      <p class="metric-value">{{ $storageUsed }} <small>/ {{ $storageLimit }} MB</small></p>
       <div class="metric-progress">
         <div class="metric-progress-fill" style="width: {{ $storagePercent }}%;"></div>
       </div>
@@ -433,29 +450,38 @@
     <div class="section-panel">
       <div class="panel-header">
         <h3>Son Yüklenen Dosyalar</h3>
-        <a href="{{ route('files.upload') }}">+ Yeni Yükle</a>
+        <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="quickUploadForm">
+          @csrf
+          <label for="fileInput" class="file-card-btn">+ Yeni Yükle</label>
+          <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
+        </form>
       </div>
 
-      <div class="files-stack">
-        @if(isset($recentFiles) && $recentFiles->count() > 0)
-          @foreach($recentFiles as $file)
-            <div class="file-item-card">
-              <div class="file-meta-group">
-                <div class="file-icon-box">📄</div>
-                <div class="file-texts">
-                  <span class="file-name-text">{{ $file->name }}</span>
-                  <span class="file-info-text">{{ $file->size_mb }} MB • {{ $file->created_at?->diffForHumans() }}</span>
-                </div>
+      @if(isset($files) && count($files) > 0)
+        <div class="file-card-list">
+          @foreach($files as $file)
+            <div class="file-item">
+              <span class="file-name" title="{{ $file->original_name }}">
+                {{ $file->original_name }}
+              </span>
+              <div class="file-actions-group">
+                <span class="file-size">{{ $file->formattedSize() }}</span>
+                <a href="{{ route('files.download', $file->id) }}" class="file-download-btn">+ İndir</a>
+                
+                <form action="{{ route('files.destroy', $file->id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Bu dosyayı silmek istediğine emin misin?');">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="file-destroy-btn">- Sil</button>
+                </form>
               </div>
-              <a href="#" class="file-btn">İndir</a>
             </div>
           @endforeach
-        @else
-          <div class="no-data-box">
-            Henüz yüklenmiş bir dosya bulunmuyor.
-          </div>
-        @endif
-      </div>
+        </div>
+      @else
+        <div class="file-card-empty">
+          <p>Henüz yüklenmiş bir dosya bulunmuyor.</p>
+        </div>
+      @endif
     </div>
 
     <div class="section-panel">
@@ -464,10 +490,12 @@
       </div>
 
       <div class="actions-list">
-        <a href="{{ route('files.upload') }}" class="action-row">
-          <span>📁 Yeni Dosya Yükle</span>
+        <form action="{{ route('files.upload') }}" method="post" class="action-row" enctype="multipart/form-data" id="quickUploadForm">
+          @csrf
+          <label for="fileInput" class="file-card-btn" style="color: white;">📁 Yeni Dosya Yükle</label>
+          <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
           <span>→</span>
-        </a>
+        </form>
         <a href="{{ route('plans.index') }}" class="action-row">
           <span>📦 Planını Yükselt</span>
           <span>→</span>

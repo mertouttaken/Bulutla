@@ -366,12 +366,14 @@
           </thead>
           <tbody>
             @foreach($subscriptions as $subscription)
-            <tr>
-              <td>{{ $subscription->user->email ?? 'Bilinmiyor' }}</td>
-              <td><span class="user-badge badge-plan">{{ $subscription->plan->name ?? 'Bilinmiyor' }}</span></td>
-              <td><span class="user-badge badge-active">Aktif</span></td>
-              <td>{{ $subscription->created_at ? \Carbon\Carbon::parse($subscription->created_at)->format('d M Y') : 'Bilinmiyor' }}</td>
-            </tr>
+              @if(!$subscription->plan->isDefault())
+                <tr>
+                  <td>{{ $subscription->user->email ?? 'Bilinmiyor' }}</td>
+                  <td><span class="user-badge badge-plan">{{ $subscription->plan->name ?? 'Bilinmiyor' }}</span></td>
+                  <td><span class="user-badge badge-active">Aktif</span></td>
+                  <td>{{ $subscription->created_at ? \Carbon\Carbon::parse($subscription->created_at)->format('d M Y') : 'Bilinmiyor' }}</td>
+                </tr>
+              @endif
             @endforeach
           </tbody>
         </table>
