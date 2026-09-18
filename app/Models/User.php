@@ -78,7 +78,10 @@ class User extends Authenticatable
     {
         return $this->projects()->count();
     }
-
+    public function projectUsedID($id): int
+    {
+        return (int) File::where('project_id', $id)->sum('size');
+    }
     public function storageUsedFormatted(): string
     {
         $bytes = $this->totalStorageBytes();

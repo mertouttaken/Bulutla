@@ -432,6 +432,7 @@
     <div class="metric-card">
       <div class="metric-head">
         <span class="metric-title">Aktif Projeler</span>
+        <a href="{{ route('projects.show') }}" class="metric-badge metric-badge-success">Projeleri Görüntüle</a>
         <span class="metric-badge">{{ $projectUsed }}/{{ $projectLimit }}</span>
       </div>
       <p class="metric-value">{{ $projectUsed }} <small>Proje</small></p>

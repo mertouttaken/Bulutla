@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::get('/plans', [UserController::class, 'plans_index'])->name('plans.index');
@@ -21,12 +22,22 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::view('/subscriptions/show', 'subscriptions.show')->name('subscriptions.show');
     Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+    
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
     Route::post('/change-plan', [SubscriptionController::class, 'changeUserPlan'])->name('change-plan');
+    
     Route::get('/dashboard', [DashboardController::class, 'indexofDashboard'])->name('dashboard');
+    
     Route::post('/dashboard/files/upload', [FileController::class, 'upload'])->name('files.upload');
     Route::get('/dashboard/files/download/{fileId}', [FileController::class, 'download'])->name('files.download');
     Route::delete('/dashboard/files/destroy/{fileId}', [FileController::class, 'destroy'])->name('files.destroy');
+    
+    Route::delete('/dashboard/projects/destroy/{projectId}', [ProjectController::class, 'projectDestroy'])->name('projects.destroy');   
+    Route::put('/dashboard/projects/store/{projectId}', [ProjectController::class, 'projectStore'])->name('projects.store');     
+    Route::get('/dashboard/projects', [ProjectController::class, 'index'])->name('projects.show');        
+    Route::get('/dashboard/projects/create', [ProjectController::class, 'createIndex'])->name('projects.create');        
+
 });
 
 Route::middleware('admin')->group(function () {
