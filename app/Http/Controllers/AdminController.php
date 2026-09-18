@@ -76,7 +76,8 @@ class AdminController extends Controller
     }
     public function getMostPopularPlan()
     {
-        return Plan::withCount('subscriptions')
+        return Plan::where('is_default', 0)
+            ->withCount('subscriptions')
             ->orderByDesc('subscriptions_count')
             ->first();
     }

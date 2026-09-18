@@ -15,7 +15,6 @@ class AuthController extends Controller
     public function loginUser(LoginRequest $request)
     {
         $user = User::where('email', request('email'))->first();
-
         if($user && password_verify(request('password'), $user->password)) {
             Auth::login($user);
             return redirect('home');
@@ -31,11 +30,11 @@ class AuthController extends Controller
             'password' => bcrypt($request->password),  
         ]);
 
-        $freePlan = Plan::where('slug', 'free')->first();
+        $defaultPlan = Plan::where('is_default', 1)->first();
 
         Subscription::create([
             'user_id' => $user->id,
-            'plan_id' => $freePlan ? $freePlan->id : 1,
+            'plan_id' => $defaultPlan ? $defaultPlan->id : 1,
             'status' => 'active',
             'ends_at' => null,
         ]);

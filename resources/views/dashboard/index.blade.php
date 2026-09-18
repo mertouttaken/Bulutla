@@ -137,9 +137,9 @@
   }
 
   .metric-badge-success {
-    background: rgba(34, 197, 94, 0.12);
-    border: 1px solid rgba(34, 197, 94, 0.25);
-    color: #4ade80;
+    background: rgba(139, 30, 196, 0.22);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    color: #c084fc;
   }
 
   .metric-value {
@@ -253,6 +253,7 @@
     background: rgba(192, 132, 252, 0.15);
     transform: translateY(-1px);
   }
+
   .file-destroy-btn {
     background: transparent;
     border: none;
@@ -291,6 +292,7 @@
     gap: 16px;
     transition: all 0.2s ease;
   }
+
   .file-item:hover {
     border-color: rgba(139, 30, 196, 0.35);
     background: #1a1b35;
@@ -304,13 +306,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
+    min-width: 0;
   }
+
   .file-actions-group {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
     flex-shrink: 0;
   }
+
   .file-size {
     color: #94a3b8;
     font-size: 0.82rem;
@@ -348,6 +353,9 @@
     font-size: 0.85rem;
     font-weight: 500;
     transition: all 0.2s;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .action-row:hover {
@@ -369,7 +377,6 @@
   $limitUnit = isset($matches[2]) ? strtoupper(trim($matches[2])) : 'MB';
 
   $storageLimit = ($limitUnit === 'GB') ? ($limitValue * 1024) : $limitValue;
-
   $storagePercent = $storageLimit > 0 ? min(100, round(($storageUsed / $storageLimit) * 100)) : 0;
 
   $projectUsed = $user->projectUsedValue();
@@ -386,14 +393,14 @@
     </div>
 
     <div class="header-actions">
-      <form action="{{ route('files.upload') }}" method="post" class="btn-cta-primary" enctype="multipart/form-data" id="quickUploadForm">
+      <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="headerUploadForm" style="margin: 0;">
         @csrf
-        <label for="fileInput" class="file-card-btn" style="color: white;">+ Dosya Yükle</label>
-        <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
+        <label for="headerFileInput" class="btn-cta-primary">
+          <span>+</span> Dosya Yükle
+        </label>
+        <input type="file" name="file" id="headerFileInput" style="display: none;" onchange="document.getElementById('headerUploadForm').submit();">
       </form>
-      <a href="{{ route('plans.index') }}" class="btn-cta-secondary">
-        Planları İncele
-      </a>
+      <a href="{{ route('plans.index') }}" class="btn-cta-secondary">Planları İncele</a>
     </div>
   </div>
 
@@ -437,7 +444,7 @@
       </div>
       <p class="metric-value">{{ $user->plan?->name ?? 'Başlangıç' }}</p>
       <div class="metric-progress">
-        <div class="metric-progress-fill" style="width: 100%; background: #4ade80;"></div>
+        <div class="metric-progress-fill" style="width: 100%;"></div>
       </div>
       <div class="metric-footer">
         <span>{{ $user->plan?->price ?? 0 }} ₺ / ay</span>
@@ -450,10 +457,10 @@
     <div class="section-panel">
       <div class="panel-header">
         <h3>Son Yüklenen Dosyalar</h3>
-        <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="quickUploadForm">
+        <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="panelUploadForm" style="margin: 0;">
           @csrf
-          <label for="fileInput" class="file-card-btn">+ Yeni Yükle</label>
-          <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
+          <label for="panelFileInput" class="file-card-btn">+ Yeni Yükle</label>
+          <input type="file" name="file" id="panelFileInput" style="display: none;" onchange="document.getElementById('panelUploadForm').submit();">
         </form>
       </div>
 
@@ -490,12 +497,15 @@
       </div>
 
       <div class="actions-list">
-        <form action="{{ route('files.upload') }}" method="post" class="action-row" enctype="multipart/form-data" id="quickUploadForm">
+        <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="quickActionForm" style="margin: 0;">
           @csrf
-          <label for="fileInput" class="file-card-btn" style="color: white;">📁 Yeni Dosya Yükle</label>
-          <input type="file" name="file" id="fileInput" style="display: none;" onchange="document.getElementById('quickUploadForm').submit();">
-          <span>→</span>
+          <label for="quickActionInput" class="action-row">
+            <span>📁 Yeni Dosya Yükle</span>
+            <span>→</span>
+          </label>
+          <input type="file" name="file" id="quickActionInput" style="display: none;" onchange="document.getElementById('quickActionForm').submit();">
         </form>
+
         <a href="{{ route('plans.index') }}" class="action-row">
           <span>📦 Planını Yükselt</span>
           <span>→</span>
