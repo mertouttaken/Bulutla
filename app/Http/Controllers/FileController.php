@@ -12,7 +12,7 @@ class FileController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:102400',
+            'file' => 'required|file|max:102400|mimes:jpg,png,pdf,doc,docx,zip,txt',
         ]);
 
         $user = $request->user();
@@ -55,10 +55,6 @@ class FileController extends Controller
     {
         $user = $request->user();
 
-        if (!$user) {
-            return back()->with('error', 'Oturum açmanız gerekiyor.');
-        }
-
         $fileRecord = $user->files()->find($fileId);
 
         if (!$fileRecord) {
@@ -74,11 +70,7 @@ class FileController extends Controller
     public function destroy(Request $request, $fileId)
     {
         $user = $request->user();
-
-        if (!$user) {
-            return back()->with('error', 'Oturum açmanız gerekiyor.');
-        }
-
+        
         $fileRecord = $user->files()->find($fileId);
 
         if (!$fileRecord) {

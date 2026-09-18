@@ -21,7 +21,7 @@ class AdminController extends Controller
         $maxStorageLimit = $this->maxServerStorageLimit();
         $usedStorage = $this->usedServerStorage();
         $getMostPopularPlan = Plan::getMostPopularPlan();
-        $subscriptions = Subscription::with('user', 'plan')->orderBy('created_at', 'desc')->latest()->get();
+        $subscriptions = Subscription::with('user', 'plan')->latest()->get();
         return view('admin.index', compact('totalSubscription', 'totalValue', 'maxStorageLimit', 'usedStorage', 'getMostPopularPlan', 'subscriptions'));
     }
     public function plans_index()

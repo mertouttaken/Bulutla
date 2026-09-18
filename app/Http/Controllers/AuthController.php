@@ -15,6 +15,8 @@ class AuthController extends Controller
     public function loginUser(LoginRequest $request)
     {
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $request->session()->regenerate();
+
             return redirect()->intended(route('home'));
         }
 
