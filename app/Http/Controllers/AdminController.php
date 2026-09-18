@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Subscription;
-use App\Models\Plan;
-use App\Http\Requests\PlanRequest;
 use App\Models\User;
+use App\Models\Plan;
+use App\Models\File as FileModel;
+use App\Http\Requests\PlanRequest;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -83,12 +86,12 @@ class AdminController extends Controller
     }
     public function maxServerStorageLimit()
     {
-        $maxStorageLimit = 1230;
+        $maxStorageLimit = round(disk_total_space(storage_path()) / 1024 / 1024 / 1024, 2);
         return $maxStorageLimit;
     }
     public function usedServerStorage()
     {
-        $usedStorage = 320;
+        $usedStorage = round(FileModel::all()->sum('size') / 1024 / 1024 / 1024, 2);  
         return $usedStorage;
     }
 }

@@ -20,7 +20,10 @@
     flex-wrap: wrap;
     gap: 20px;
   }
-
+  @keyframes loadBar {
+    0% { width: 0%; }
+    100% { width: var(--bar-fill); }
+  }
   .header-info h1 {
     font-size: 1.65rem;
     font-weight: 700;
@@ -357,7 +360,13 @@
     width: 100%;
     box-sizing: border-box;
   }
-
+  .fill-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #5f1587, #c084fc);
+    border-radius: 99px;
+    animation: loadBar 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
   .action-row:hover {
     background: #1a1b35;
     color: #ffffff;
@@ -412,7 +421,7 @@
       </div>
       <p class="metric-value">{{ $storageUsed }} <small>/ {{ $storageLimit }} MB</small></p>
       <div class="metric-progress">
-        <div class="metric-progress-fill" style="width: {{ $storagePercent }}%;"></div>
+         <div class="fill-bar" style="--bar-fill: {{ $storagePercent }}%;"></div>
       </div>
       <div class="metric-footer">
         <span>Kalan: {{ max(0, $storageLimit - $storageUsed) }} MB</span>
@@ -427,7 +436,7 @@
       </div>
       <p class="metric-value">{{ $projectUsed }} <small>Proje</small></p>
       <div class="metric-progress">
-        <div class="metric-progress-fill" style="width: {{ $projectPercent }}%;"></div>
+        <div class="fill-bar" style="--bar-fill: {{ $projectPercent }}%;"></div>
       </div>
       <div class="metric-footer">
         <span>Limit: {{ $projectLimit }} Proje</span>

@@ -305,13 +305,15 @@
           </div>
         </div>
 
-        <div class="danger-box">
-          <p>Aboneliğinizi iptal ettiğinizde mevcut fatura dönemi bitiminde hesabınız otomatik olarak Free plana geçirilir.</p>
-          <form method="POST" action="{{ route('subscriptions.cancel') }}" onsubmit="return confirm('Aboneliğinizi iptal etmek istediğinize emin misiniz?');">
-            @csrf
-            <button type="submit" class="btn-cancel">Aboneliği İptal Et</button>
-          </form>
-        </div>
+        @if($user->subscription && $user->subscription->status === 'active' && !$user->subscription->plan->isDefault())
+          <div class="danger-box">
+            <p>Aboneliğinizi iptal ettiğinizde mevcut fatura dönemi bitiminde hesabınız otomatik olarak Free plana geçirilir.</p>
+            <form method="POST" action="{{ route('subscriptions.cancel') }}" onsubmit="return confirm('Aboneliğinizi iptal etmek istediğinize emin misiniz?');">
+              @csrf
+              <button type="submit" class="btn-cancel">Aboneliği İptal Et</button>
+            </form>
+          </div>
+        @endif
       </div>
 
       <!-- Fatura Geçmişi -->

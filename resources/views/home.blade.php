@@ -2,11 +2,39 @@
 
 @section('content')
 <style>
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes loadBar {
+    0% { width: 0%; }
+    100% { width: var(--bar-fill); }
+  }
+
   .landing-page {
     background: #0b0c16;
     color: #e2e8f0;
     font-family: inherit;
     width: 100%;
+    overflow-x: hidden;
   }
 
   .landing-wrap {
@@ -39,6 +67,8 @@
   .hero-left {
     flex: 1 1 55%;
     min-width: 0;
+    animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
   }
 
   .badge-tag {
@@ -131,6 +161,8 @@
     flex: 0 0 390px;
     width: 390px;
     max-width: 100%;
+    animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
   }
 
   .preview-box {
@@ -195,7 +227,7 @@
   }
 
   .track-bar {
-    height: 7px;
+    height: 8px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 99px;
     overflow: hidden;
@@ -203,8 +235,10 @@
 
   .fill-bar {
     height: 100%;
+    width: 0%;
     background: linear-gradient(90deg, #5f1587, #c084fc);
     border-radius: 99px;
+    animation: loadBar 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   /* Features */
@@ -242,6 +276,12 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 16px;
     padding: 26px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(192, 132, 252, 0.35);
   }
 
   .feature-card.stat .stat-num {
@@ -287,12 +327,13 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   }
 
   .plan-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    border-color: rgba(192, 132, 252, 0.4);
   }
 
   .plan-card.featured {
@@ -440,7 +481,7 @@
                     <span><strong>{{ $usedMB }} MB</strong> / {{ $storageLimitMB }} MB</span>
                   </div>
                   <div class="track-bar">
-                    <div class="fill-bar" style="width: {{ $storagePct }}%;"></div>
+                    <div class="fill-bar" style="--bar-fill: {{ $storagePct }}%;"></div>
                   </div>
                 </div>
 
@@ -450,7 +491,7 @@
                     <span><strong>{{ $usedProj }}</strong> / {{ $projLimit > 0 ? $projLimit : 'Sınırsız' }}</span>
                   </div>
                   <div class="track-bar">
-                    <div class="fill-bar" style="width: {{ $projPct }}%;"></div>
+                    <div class="fill-bar" style="--bar-fill: {{ $projPct }}%;"></div>
                   </div>
                 </div>
               </div>
@@ -486,6 +527,7 @@
     </div>
   </section>
 
+  <!-- Planlar -->
   <section class="section-plans">
     <div class="landing-wrap">
       <div class="section-head">

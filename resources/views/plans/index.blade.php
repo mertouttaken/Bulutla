@@ -2,6 +2,22 @@
 
 @section('content')
 <style>
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .plan-left {
+    flex: 1 1 55%;
+    min-width: 0;
+    animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
+  }
   .pricing-page-wrapper {
     min-height: 85vh;
     padding: 70px 0 100px;
@@ -210,56 +226,57 @@
       <h1 class="pricing-title">İhtiyacınıza Uygun Planı Seçin</h1>
       <p class="pricing-note">Aylık faturalandırma, dilediğiniz an tek tıkla iptal veya plan değişimi.</p>
     </div>
-    
-    <div class="pricing-grid">
-      @foreach($plans as $plan)
-        @php
-          $userCurrentPlanSlug = Auth::check() ? Auth::user()->loadMissing('subscription.plan')->subscription?->plan?->slug : null;
-          $isCurrent = $userCurrentPlanSlug && $userCurrentPlanSlug === $plan->slug;
+    <div class="plan-left">
+      <div class="pricing-grid">
+        @foreach($plans as $plan)
+          @php
+            $userCurrentPlanSlug = Auth::check() ? Auth::user()->loadMissing('subscription.plan')->subscription?->plan?->slug : null;
+            $isCurrent = $userCurrentPlanSlug && $userCurrentPlanSlug === $plan->slug;
 
-          $json = json_decode($plan->features, true);
-          $features = is_array($json) ? $json : (is_array($plan->features) ? $plan->features : explode(',', (string) $plan->features));
-        @endphp
+            $json = json_decode($plan->features, true);
+            $features = is_array($json) ? $json : (is_array($plan->features) ? $plan->features : explode(',', (string) $plan->features));
+          @endphp
 
-        <div class="plan-card {{ $isCurrent ? 'current' : '' }}">
-          @if($isCurrent)
-            <span class="plan-badge-status">Mevcut Planınız</span>
-          @endif
-
-          <h3 class="plan-name">{{ $plan->name }}</h3>
-
-          <p class="plan-price">
-            {{ $plan->price > 0 ? $plan->price . ' ₺' : 'Ücretsiz' }}
-            @if($plan->price > 0)
-              <span>/ ay</span>
-            @endif
-          </p>
-
-          <p class="plan-desc">{{ $plan->description }}</p>
-
-          <ul class="plan-features">
-            @foreach($features as $feature)
-              @if(trim($feature))
-                <li><span class="tick">✓</span> {{ trim($feature) }}</li>
-              @endif
-            @endforeach
-          </ul>
-
-          @guest
-            <a href="{{ route('register') }}" class="btn-primary btn-block">Bu Planla Başla</a>
-          @else
+          <div class="plan-card {{ $isCurrent ? 'current' : '' }}">
             @if($isCurrent)
-              <button type="button" class="btn-current btn-block" disabled>Bu Planı Kullanıyorsunuz</button>
-            @else
-              <form action="{{ route('change-plan') }}" method="POST" style="margin: 0;">
-                @csrf
-                <input type="hidden" name="plan" value="{{ $plan->slug }}">
-                <button type="submit" class="btn-primary btn-block">Bu Plana Geç</button>
-              </form>
+              <span class="plan-badge-status">Mevcut Planınız</span>
             @endif
-          @endguest
-        </div>
-      @endforeach
+
+            <h3 class="plan-name">{{ $plan->name }}</h3>
+
+            <p class="plan-price">
+              {{ $plan->price > 0 ? $plan->price . ' ₺' : 'Ücretsiz' }}
+              @if($plan->price > 0)
+                <span>/ ay</span>
+              @endif
+            </p>
+
+            <p class="plan-desc">{{ $plan->description }}</p>
+
+            <ul class="plan-features">
+              @foreach($features as $feature)
+                @if(trim($feature))
+                  <li><span class="tick">✓</span> {{ trim($feature) }}</li>
+                @endif
+              @endforeach
+            </ul>
+
+            @guest
+              <a href="{{ route('register') }}" class="btn-primary btn-block">Bu Planla Başla</a>
+            @else
+              @if($isCurrent)
+                <button type="button" class="btn-current btn-block" disabled>Bu Planı Kullanıyorsunuz</button>
+              @else
+                <form action="{{ route('change-plan') }}" method="POST" style="margin: 0;">
+                  @csrf
+                  <input type="hidden" name="plan" value="{{ $plan->slug }}">
+                  <button type="submit" class="btn-primary btn-block">Bu Plana Geç</button>
+                </form>
+              @endif
+            @endguest
+          </div>
+        @endforeach
+      </div>
     </div>
   </div>
 </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\FileController;
 Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::get('/home', [DashboardController::class, 'index'])->name('home');
 Route::get('/plans', [UserController::class, 'plans_index'])->name('plans.index');
+
 Route::middleware('guest')->group(function () {
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login-process',  [AuthController::class, 'loginUser'])->name('login-process');
