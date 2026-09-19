@@ -51,7 +51,7 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/plans', [AdminController::class, 'store'])->name('admin.plans.store');
     Route::get('/admin/plans/{plan}/edit', [AdminController::class, 'edit'])->name('admin.plans.edit');
     Route::put('/admin/plans/{plan}', [AdminController::class, 'update'])->name('admin.plans.update');
-    Route::delete('/admin/plans/{plan}/destroy', [AdminController::class, 'destroy'])->name('admin.plans.destroy');
+    Route::delete('/admin/plans/{plan}/destroy', [AdminController::class, 'destroyPlan'])->name('admin.plans.destroy');
     
     Route::get('/admin/subscriptions', [AdminController::class, 'indexOfSubscriptions'])->name('admin.subscriptions.index');
     Route::get('/admin/subscriptions/{subscriptionId}/show', [SubscriptionController::class, 'showSubscription'])->name('admin.subscriptions.show');

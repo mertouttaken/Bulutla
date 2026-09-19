@@ -588,11 +588,13 @@
                 </div>
                 <div class="quick-actions">
                   <a href="{{ route('admin.plans.edit', $plan) }}" class="btn-action">Düzenle</a>
-                  <form action="{{ route('admin.plans.destroy', $plan) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu planı silmek istediğinize emin misiniz?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn-action btn-danger">Sil</button>
-                  </form>
+                  @if(!$plan->is_default)
+                    <form action="{{ route('admin.plans.destroy', $plan) }}" method="POST" style="display: inline;" onsubmit="return confirm('Bu planı silmek istediğinize emin misiniz?');">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn-action btn-danger">Sil</button>
+                    </form>
+                  @endif
                 </div>
               </div>
             @empty

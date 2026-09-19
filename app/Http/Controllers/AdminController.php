@@ -98,8 +98,12 @@ class AdminController extends Controller
         return redirect()->route('admin.plans.actions')->with('success', 'Plan başarıyla güncellendi.');
     }
 
-    public function destroy(Plan $plan)
+    public function destroyPlan(Plan $plan)
     {
+        if ($plan->is_default) {
+            return redirect()->route('admin.plans.actions')->with('error', 'Varsayılan plan silinemez.');
+        }
+
         $plan->delete();
 
         return redirect()->route('admin.plans.actions');
