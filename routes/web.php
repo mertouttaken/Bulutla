@@ -20,7 +20,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::view('/subscriptions/show', 'subscriptions.show')->name('subscriptions.show');
+    Route::view('/subscriptions', 'subscriptions.show')->name('subscriptions.show');
     Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
