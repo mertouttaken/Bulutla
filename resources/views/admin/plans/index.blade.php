@@ -2,18 +2,39 @@
 
 @section('content')
 <style>
+  :root {
+    --bg-surface: #0b0d14;
+    --bg-sidebar: #111420;
+    --bg-card: rgba(17, 20, 34, 0.85);
+    --border-subtle: rgba(255, 255, 255, 0.07);
+    --border-accent: rgba(192, 132, 252, 0.35);
+    --neon-purple: #c084fc;
+    --neon-purple-glow: rgba(192, 132, 252, 0.25);
+    --text-primary: #f8fafc;
+    --text-muted: #8f9bba;
+  }
+
   .admin-layout {
     display: grid;
     grid-template-columns: 260px 1fr;
     min-height: calc(100vh - 70px);
-    background: #0b0d14;
+    background: var(--bg-surface);
     color: #e2e8f0;
     font-family: inherit;
   }
 
+  @media (max-width: 1024px) {
+    .admin-layout {
+      grid-template-columns: 1fr;
+    }
+    .admin-sidebar {
+      display: none;
+    }
+  }
+
   .admin-sidebar {
-    background: #111420;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border-subtle);
     padding: 28px 20px;
     display: flex;
     flex-direction: column;
@@ -54,7 +75,7 @@
     gap: 12px;
     padding: 10px 14px;
     border-radius: 10px;
-    color: #8f9bba;
+    color: var(--text-muted);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -103,7 +124,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 36px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--border-subtle);
     background: #0e111a;
   }
 
@@ -121,7 +142,7 @@
     background: rgba(255, 255, 255, 0.03);
     padding: 6px 14px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
     font-size: 0.85rem;
     color: #cbd5e1;
   }
@@ -133,89 +154,186 @@
     gap: 28px;
   }
 
+  .content-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .btn-cta-primary {
+    background: linear-gradient(135deg, #7e22ce, #a855f7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(168, 85, 247, 0.5);
+  }
+
   .plans-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 24px;
+    align-items: stretch;
   }
 
   .plan-card {
-    background: linear-gradient(180deg, #151928 0%, #111422 100%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 16px;
-    padding: 26px;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 22px;
+    padding: 28px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 22px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     position: relative;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .plan-card.featured {
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.12);
+  .plan-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .plan-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-accent);
+    box-shadow: 0 14px 35px rgba(95, 21, 135, 0.3);
+  }
+
+  .plan-card.is-default {
+    border-color: rgba(192, 132, 252, 0.45);
+    background: linear-gradient(180deg, rgba(95, 21, 135, 0.12) 0%, rgba(17, 20, 34, 0.9) 100%);
   }
 
   .plan-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  .plan-title-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .plan-name {
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.35rem;
+    font-weight: 800;
     color: #fff;
-    margin: 0 0 6px 0;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .plan-slug {
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+
+  .badges-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
   }
 
   .plan-badge {
-    font-size: 0.75rem;
-    padding: 4px 10px;
-    border-radius: 20px;
+    font-size: 0.7rem;
+    padding: 3px 9px;
+    border-radius: 12px;
     font-weight: 600;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
 
-  .plan-badge.active {
-    background: rgba(34, 197, 94, 0.15);
-    color: #4ade80;
+  .badge-default {
+    background: rgba(192, 132, 252, 0.18);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+    color: #d8b4fe;
+  }
+
+  .badge-order {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
   }
 
   .plan-price-box {
     display: flex;
     align-items: baseline;
-    gap: 4px;
+    gap: 6px;
+    padding-bottom: 4px;
   }
 
   .plan-price {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: #fff;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   .plan-period {
-    font-size: 0.85rem;
-    color: #64748b;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+
+  .plan-desc {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
   }
 
   .plan-limits {
+    background: rgba(14, 15, 29, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .limit-item {
     display: flex;
     justify-content: space-between;
-    font-size: 0.88rem;
-    color: #94a3b8;
+    align-items: center;
+    font-size: 0.84rem;
+    color: var(--text-muted);
   }
 
   .limit-item strong {
     color: #e2e8f0;
+    font-weight: 600;
   }
 
   .plan-features-list {
@@ -231,13 +349,45 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     color: #cbd5e1;
   }
 
-  .plan-features-list .check {
-    color: #6366f1;
-    font-weight: bold;
+  .plan-features-list .check-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: rgba(192, 132, 252, 0.15);
+    color: var(--neon-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
+  .plan-card-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn-edit-plan {
+    color: var(--neon-purple);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-edit-plan:hover {
+    color: #ffffff;
+    transform: translateX(3px);
   }
 </style>
 
@@ -274,41 +424,91 @@
     </header>
 
     <main class="admin-content">
-      <div class="plans-grid">
-        @foreach($plans as $plan)
-          <div class="plan-card">
-            <div class="plan-header">
-              <div>
-                <h3 class="plan-name">{{ $plan->name ?? 'Free' }}</h3>
-              </div>
-              <span class="plan-badge active">Aktif</span>
-            </div>
-            <div class="plan-price-box">
-              <span class="plan-price">{{ isset($plan->price) ? number_format($plan->price, 2, ',', '.') : '999,00' }} ₺</span>
-              <span class="plan-period">/ ay</span>
-            </div>
-            <div class="plan-limits">
-              <div class="limit-item">
-                <span>Depolama Limiti:</span>
-                <strong>{{ $plan->storage_limit ?? '100 MB' }}</strong>
-              </div>
-              <div class="limit-item">
-                <span>Proje Limiti:</span>
-                <strong>{{ $plan->project_limit > 0 ? $plan->project_limit : 'Sınırsız' }}</strong>
-              </div>
-            </div>
-            <ul class="plan-features-list">
-                @php
-                    $json = json_decode($plan->features, true);
-                    $features = is_array($json) ? $json : explode(',', $plan->features);
-                @endphp
-                @foreach($features as $feature)
-                  <li><span class="check">✔</span> {{ $feature }}</li>
-                @endforeach
-            </ul>
-          </div>
-        @endforeach
+      
+      <div class="content-header-actions">
+        <div>
+          <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">
+            Sistemde kayıtlı tüm paketler ve abonelik sınırları aşağıda listelenmiştir.
+          </p>
+        </div>
+        <a href="{{ route('admin.plans.actions') }}" class="btn-cta-primary">
+          <span>+</span> Yeni Plan Tanımla
+        </a>
       </div>
+
+      <div class="plans-grid">
+        @forelse($plans as $plan)
+          <div class="plan-card {{ $plan->is_default ? 'is-default' : '' }}">
+            <div style="display: flex; flex-direction: column; gap: 18px;">
+              
+              <div class="plan-header">
+                <div class="plan-title-col">
+                  <h3 class="plan-name">{{ $plan->name ?? 'Plan' }}</h3>
+                  <span class="plan-slug">slug: /{{ $plan->slug }}</span>
+                </div>
+
+                <div class="badges-wrap">
+                  @if($plan->is_default)
+                    <span class="plan-badge badge-default">★ Varsayılan</span>
+                  @endif
+                  <span class="plan-badge badge-order">Sıra #{{ $plan->sort_order ?? 0 }}</span>
+                </div>
+              </div>
+
+              <div class="plan-price-box">
+                <span class="plan-price">{{ number_format($plan->price ?? 0, 2, ',', '.') }} ₺</span>
+                <span class="plan-period">/ ay</span>
+              </div>
+
+              @if($plan->description)
+                <p class="plan-desc">{{ $plan->description }}</p>
+              @endif
+
+              <div class="plan-limits">
+                <div class="limit-item">
+                  <span>Depolama Alanı</span>
+                  <strong style="color: var(--neon-purple);">{{ $plan->storage_limit ?? '100 MB' }}</strong>
+                </div>
+                <div class="limit-item">
+                  <span>Proje Kotası</span>
+                  <strong>{{ ($plan->project_limit && $plan->project_limit > 0) ? $plan->project_limit . ' Adet' : 'Sınırsız' }}</strong>
+                </div>
+              </div>
+
+              <ul class="plan-features-list">
+                @php
+                  $json = json_decode($plan->features, true);
+                  $features = is_array($json) ? $json : array_filter(array_map('trim', explode(',', (string)$plan->features)));
+                @endphp
+                @forelse($features as $feature)
+                  <li>
+                    <span class="check-icon">✓</span>
+                    <span>{{ $feature }}</span>
+                  </li>
+                @empty
+                  <li style="color: #64748b; font-style: italic;">Ek özellik belirtilmemiş.</li>
+                @endforelse
+              </ul>
+
+            </div>
+
+            <div class="plan-card-footer">
+              <span style="font-size: 0.78rem; color: #64748b;">
+                Aktif Kayıt: <strong style="color: #cbd5e1;">{{ $plan->subscriptions()->where('status', 'active')->count() }}</strong>
+              </span>
+              <a href="{{ route('admin.plans.edit', $plan) }}" class="btn-edit-plan">
+                <span>Düzenle</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        @empty
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: var(--bg-card); border-radius: 18px; border: 1px dashed var(--border-subtle);">
+            Henüz tanımlanmış bir plan bulunamadı.
+          </div>
+        @endforelse
+      </div>
+
     </main>
   </div>
 </div>

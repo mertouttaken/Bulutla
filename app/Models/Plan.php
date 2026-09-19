@@ -15,8 +15,11 @@ class Plan extends Model
         'sort_order',
         'storage_limit',
         'project_limit',
+        'is_default',
     ];
-
+    protected $casts = [
+        'is_default' => 'boolean',
+    ];
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
@@ -38,7 +41,7 @@ class Plan extends Model
     }
     public function isDefault(): bool
     {
-        return $this->slug === 'free';
+        return (bool) $this->is_default;
     }
     public static function getMostPopularPlan()
     {

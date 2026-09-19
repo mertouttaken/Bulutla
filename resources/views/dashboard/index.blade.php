@@ -401,6 +401,9 @@
       <p>Projelerinin durumunu ve çalışma alanı kaynaklarını buradan yönetebilirsin.</p>
     </div>
 
+    <div class="header-actions">
+        <a href="{{  route('projects.show') }}" class="btn-cta-primary"> <span>+</span> Dosya Yükle </a>
+    </div>
   </div>
 
   <div class="metrics-grid">

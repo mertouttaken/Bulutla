@@ -86,12 +86,85 @@
     padding: 8px 12px;
     color: #64748b;
   }
+  .toggle-container {
+    background: #17182e;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
 
+  .toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .toggle-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .toggle-subtitle {
+    font-size: 0.76rem;
+    color: #9d9bb8;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
   .admin-main {
     display: flex;
     flex-direction: column;
   }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #272844;
+    transition: 0.25s ease;
+    border-radius: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #9d9bb8;
+    transition: 0.25s ease;
+    border-radius: 50%;
+  }
+
+  .switch input:checked + .slider {
+    background: linear-gradient(135deg, #5f1587, #8b1ec4);
+    border-color: rgba(192, 132, 252, 0.5);
+    box-shadow: 0 0 12px rgba(139, 30, 196, 0.4);
+  }
+
+  .switch input:checked + .slider:before {
+    transform: translateX(22px);
+    background-color: #ffffff;
+  }
   .admin-topbar {
     display: flex;
     justify-content: space-between;
@@ -341,8 +414,21 @@
               <label>Özellikler (Virgülle ayırın)</label>
               <input type="text" name="features" class="form-control" value="{{ old('features', $plan->features) }}">
             </div>
+            
           </div>
+          <div class="toggle-container">
+              <div class="toggle-text">
+                <span class="toggle-title">Varsayılan Plan</span>
+                <span class="toggle-subtitle">Yeni kayıt olan kullanıcılara otomatik olarak bu plan atanır.</span>
+              </div>
 
+              <input type="hidden" name="is_default" value="0">
+              <label class="switch">
+                  <input type="checkbox" name="is_default" value="1" {{ old('is_default', $plan->is_default) ? 'checked' : '' }}>
+                  <span class="slider"></span>
+              </label>
+          </div>
+          
           <div class="card-actions">
             <a href="{{ route('admin.plans.actions') }}" class="btn-secondary">İptal</a>
             <button type="submit" class="btn-submit">Değişiklikleri Kaydet</button>

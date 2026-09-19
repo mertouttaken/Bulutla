@@ -18,6 +18,7 @@ class PlanSeeder extends Seeder
                 'storage_limit' => '100 MB',
                 'project_limit' => 1,
                 'is_default' => true,
+                'sort_order' => 0,
                 'features' => json_encode(['1 proje', '100 MB depolama', 'Topluluk desteği']),
             ]
         );
@@ -30,6 +31,7 @@ class PlanSeeder extends Seeder
                 'price' => 199.00,
                 'storage_limit' => '10 GB',
                 'project_limit' => 10,
+                'sort_order' => 1,
                 'features' => json_encode(['10 proje', '10 GB depolama', 'E-posta desteği', 'Gelişmiş raporlar']),
             ]
         );
@@ -42,6 +44,7 @@ class PlanSeeder extends Seeder
                 'price' => 999.00,
                 'storage_limit' => '100 GB',
                 'project_limit' => -1,
+                'sort_order' => 2,
                 'features' => json_encode(['Sınırsız proje', '100 GB depolama', 'Öncelikli destek', 'Özel entegrasyonlar']),
             ]
         );

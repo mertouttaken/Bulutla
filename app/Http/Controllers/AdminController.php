@@ -9,6 +9,8 @@ use App\Models\Plan;
 use App\Models\File as FileModel;
 use App\Http\Requests\PlanRequest;
 use App\Models\File;
+use Illuminate\Support\Facades\DB;
+
 class AdminController extends Controller
 {
     public function index()
@@ -62,7 +64,7 @@ class AdminController extends Controller
 
     public function store(PlanRequest $request)
     {
-        Plan::create($request->only('name', 'slug', 'storage_limit', 'project_limit', 'price', 'description', 'features', 'sort_order'));
+        Plan::create($request->only('name', 'slug', 'storage_limit', 'project_limit', 'price', 'description', 'features', 'sort_order', 'is_default'));
 
         return redirect()->route('admin.plans.index');
     }
@@ -74,9 +76,26 @@ class AdminController extends Controller
 
     public function update(PlanRequest $request, Plan $plan)
     {
-        $plan->update($request->only('name', 'slug', 'storage_limit', 'project_limit', 'price', 'description', 'features', 'sort_order'));
+        $isDefault = $request->boolean('is_default');
 
-        return redirect()->route('admin.plans.actions');
+        DB::transaction(function () use ($request, $plan, $isDefault) {
+            if ($isDefault) {
+                Plan::where('id', '!=', $plan->id)
+                    ->where('is_default', 1)
+                    ->update(['is_default' => 0]);
+            }
+
+            $data = $request->only([
+                'name', 'slug', 'storage_limit', 'project_limit',
+                'price', 'description', 'features', 'sort_order'
+            ]);
+
+            $data['is_default'] = $isDefault;
+
+            $plan->update($data);
+        });
+
+        return redirect()->route('admin.plans.actions')->with('success', 'Plan başarıyla güncellendi.');
     }
 
     public function destroy(Plan $plan)
@@ -133,11 +152,8 @@ class AdminController extends Controller
     }
     public function userDestroy(User $user)
     {
+
         File::destroyData($user);
-
-        $user->delete();
-
-        $user->files()->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'Kullanıcı başarıyla silindi.');
     }
