@@ -420,11 +420,10 @@
                       </span>
                     </div>
                   </td>
-                  <td>{{ $user->created_at?->format('d M Y') }}</td>
+                  <td>{{ $user->created_at?->translatedFormat('d M Y') }}</td>
                   <td>
                     <div class="table-actions">
-                      <button class="action-btn">Düzenle</button>
-                      <button class="action-btn danger">Engelle</button>
+                      <a href="{{ route('admin.users.edit', $user) }}" class="action-btn">Düzenle</a>
                     </div>
                   </td>
                 </tr>

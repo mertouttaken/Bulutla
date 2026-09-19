@@ -23,6 +23,12 @@ class User extends Authenticatable
         'password',
         'stripe_id',
         'pm_type',
+        'is_admin',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
+        'email_verified_at' => 'datetime',
     ];
 
     protected $hidden = [
@@ -64,9 +70,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(File::class);
     }
+
     public function totalStorageBytes()
     {
-        return $this->files()->sum('size');
+        return (int) $this->files()->sum('size');
     }
 
     public function storageUsedValue(): float
@@ -78,10 +85,12 @@ class User extends Authenticatable
     {
         return $this->projects()->count();
     }
+
     public function projectUsedID($id): int
     {
         return (int) File::where('project_id', $id)->sum('size');
     }
+
     public function storageUsedFormatted(): string
     {
         $bytes = $this->totalStorageBytes();

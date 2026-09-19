@@ -401,16 +401,6 @@
       <p>Projelerinin durumunu ve çalışma alanı kaynaklarını buradan yönetebilirsin.</p>
     </div>
 
-    <div class="header-actions">
-      <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="headerUploadForm" style="margin: 0;">
-        @csrf
-        <label for="headerFileInput" class="btn-cta-primary">
-          <span>+</span> Dosya Yükle
-        </label>
-        <input type="file" name="file" id="headerFileInput" style="display: none;" onchange="document.getElementById('headerUploadForm').submit();">
-      </form>
-      <a href="{{ route('plans.index') }}" class="btn-cta-secondary">Planları İncele</a>
-    </div>
   </div>
 
   <div class="metrics-grid">
@@ -467,11 +457,6 @@
     <div class="section-panel">
       <div class="panel-header">
         <h3>Son Yüklenen Dosyalar</h3>
-        <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="panelUploadForm" style="margin: 0;">
-          @csrf
-          <label for="panelFileInput" class="file-card-btn">+ Yeni Yükle</label>
-          <input type="file" name="file" id="panelFileInput" style="display: none;" onchange="document.getElementById('panelUploadForm').submit();">
-        </form>
       </div>
 
       @if(isset($files) && count($files) > 0)
@@ -480,6 +465,7 @@
             <div class="file-item">
               <span class="file-name" title="{{ $file->original_name }}">
                 {{ $file->original_name }}
+                <span class="file-size">({{ App\Models\Project::find($file->project_id)->name ?? 'Bilinmeyen Proje' }})</span>
               </span>
               <div class="file-actions-group">
                 <span class="file-size">{{ $file->formattedSize() }}</span>
@@ -509,11 +495,10 @@
       <div class="actions-list">
         <form action="{{ route('files.upload') }}" method="post" enctype="multipart/form-data" id="quickActionForm" style="margin: 0;">
           @csrf
-          <label for="quickActionInput" class="action-row">
+          <a href="{{ route('projects.show') }}" class="action-row">
             <span>📁 Yeni Dosya Yükle</span>
             <span>→</span>
           </label>
-          <input type="file" name="file" id="quickActionInput" style="display: none;" onchange="document.getElementById('quickActionForm').submit();">
         </form>
 
         <a href="{{ route('plans.index') }}" class="action-row">

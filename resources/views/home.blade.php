@@ -456,7 +456,7 @@
 
               <div class="preview-line">
                 <span class="line-label">Sonraki Yenileme</span>
-                <span>{{ Auth::user()->subscription?->ends_at?->format('d.m.Y') ?? 'Otomatik' }}</span>
+                <span class="file-size">{{ Auth::user()->subscription?->ends_at?->translatedFormat('d F Y') ?? 'Süresiz' }}</span>
               </div>
 
               @php

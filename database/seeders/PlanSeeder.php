@@ -17,6 +17,7 @@ class PlanSeeder extends Seeder
                 'price' => 0,
                 'storage_limit' => '100 MB',
                 'project_limit' => 1,
+                'is_default' => true,
                 'features' => json_encode(['1 proje', '100 MB depolama', 'Topluluk desteği']),
             ]
         );

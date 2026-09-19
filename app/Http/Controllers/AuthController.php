@@ -37,7 +37,7 @@ class AuthController extends Controller
             'user_id' => $user->id,
             'plan_id' => $defaultPlan ? $defaultPlan->id : 1,
             'status' => 'active',
-            'ends_at' => null,
+            'ends_at' => now()->addMonth(),
         ]);
 
         Auth::login($user);

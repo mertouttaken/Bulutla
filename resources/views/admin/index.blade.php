@@ -323,7 +323,6 @@
 
     <main class="admin-content">
       <div class="stats-grid">
-        <!-- Aktif Abone -->
         <div class="stat-card">
           <div class="stat-header">
             <span class="stat-title">Aktif Abone</span>
@@ -336,7 +335,6 @@
           </div>
         </div>
 
-        <!-- Aylık Tahmini Gelir -->
         <div class="stat-card">
           <div class="stat-header">
             <span class="stat-title">Aylık Tahmini Gelir</span>
@@ -349,7 +347,6 @@
           </div>
         </div>
 
-        <!-- Depolama Doluluğu -->
         @php
           $safeMaxLimit = max((float) ($maxStorageLimit ?? 0), 1);
           $safeUsed = (float) ($usedStorage ?? 0);
@@ -371,7 +368,6 @@
           </div>
         </div>
 
-        <!-- En Popüler Paket -->
         <div class="stat-card">
           <div class="stat-header">
             <span class="stat-title">En Popüler Paket</span>
@@ -384,7 +380,6 @@
         </div>
       </div>
 
-      <!-- Son Hareketler Tablosu -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>Son Abonelik Hareketleri</h3>
@@ -405,7 +400,7 @@
                   <td>{{ $sub->user?->email ?? 'Bilinmiyor' }}</td>
                   <td><span class="user-badge badge-plan">{{ $sub->plan?->name ?? 'Plan Yok' }}</span></td>
                   <td><span class="user-badge badge-active">Aktif</span></td>
-                  <td>{{ $sub->created_at ? $sub->created_at->format('d M Y') : '-' }}</td>
+                  <td>{{ $sub->created_at ? $sub->created_at->translatedFormat('d M Y') : '-' }}</td>
                 </tr>
               @endif
             @empty

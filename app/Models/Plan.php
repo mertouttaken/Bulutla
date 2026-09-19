@@ -21,9 +21,16 @@ class Plan extends Model
     {
         return $this->hasMany(Subscription::class);
     }
-    public function storageLimit(): string
+    public function storageLimit(): int
     {
-        return $this->storage_limit ?? '100 MB';
+        if($storageLimit = $this->storage_limit) {
+            if (stripos($storageLimit, 'MB') !== false) {
+                return (int) filter_var($storageLimit, FILTER_SANITIZE_NUMBER_INT);
+            } elseif (stripos($storageLimit, 'GB') !== false) {
+                return (int) filter_var($storageLimit, FILTER_SANITIZE_NUMBER_INT) * 1024;
+            }
+        }
+        return 0;
     }
     public function projectLimit(): int
     {
