@@ -158,9 +158,14 @@ class AdminController extends Controller
     }
     public function userDestroy(User $user)
     {
-
+        if ($user->is_admin) {
+            return redirect()->route('admin.users.index')->with('error', 'Yönetici kullanıcı silinemez.');
+        }
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'Kendi hesabınızı silemezsiniz.');
+        }
         File::destroyData($user);
-
+        
         return redirect()->route('admin.users.index')->with('success', 'Kullanıcı başarıyla silindi.');
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\File;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class FileController extends Controller
 {
@@ -34,22 +36,39 @@ class FileController extends Controller
         $uploadedFile = $request->file('file');
         $fileSizeMB = $uploadedFile->getSize() / 1048576;
 
-        DB::transaction(function () use ($user, $fileSizeMB, $storageLimitMB) {
-            $user->lockForUpdate();
-            if (($user->storageUsedValue() + $fileSizeMB) >= $storageLimitMB) {
-                throw new \Exception('Depolama alanı yetersiz!');
-            }
-        });
+        $originalRawName = basename($uploadedFile->getClientOriginalName());
+        $filenameOnly = pathinfo($originalRawName, PATHINFO_FILENAME);
+        $extension = $uploadedFile->getClientOriginalExtension();
+
+        $sluggedName = Str::slug($filenameOnly, '-');
+        $safeOriginalName = $sluggedName . ($extension ? '.' . strtolower($extension) : '');
+
+        if (empty($sluggedName)) {
+            $safeOriginalName = 'file_' . time() . ($extension ? '.' . strtolower($extension) : '');
+        }
 
         $path = $uploadedFile->store("files/{$user->id}/{$project->id}", 'local');
 
-        $user->files()->create([
-            'project_id'    => $project->id,
-            'original_name' => $uploadedFile->getClientOriginalName(),
-            'path'          => $path,
-            'mime_type'     => $uploadedFile->getClientMimeType(),
-            'size'          => $uploadedFile->getSize(),
-        ]);
+        try {
+            DB::transaction(function () use ($user, $project, $fileSizeMB, $storageLimitMB, $safeOriginalName, $path, $uploadedFile) {
+                User::where('id', $user->id)->lockForUpdate()->first();
+
+                if (($user->storageUsedValue() + $fileSizeMB) > $storageLimitMB) {
+                    throw new \Exception('Depolama alanı yetersiz!');
+                }
+
+                $user->files()->create([
+                    'project_id'    => $project->id,
+                    'original_name' => $safeOriginalName,
+                    'path'          => $path,
+                    'mime_type'     => $uploadedFile->getClientMimeType(),
+                    'size'          => $uploadedFile->getSize(),
+                ]);
+            });
+        } catch (\Exception $e) {
+            Storage::disk('local')->delete($path);
+            return back()->with('error', $e->getMessage());
+        }
 
         return back()->with('success', 'Dosya başarıyla yüklendi.');
     }
