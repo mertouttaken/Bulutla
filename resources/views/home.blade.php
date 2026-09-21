@@ -456,7 +456,15 @@
 
               <div class="preview-line">
                 <span class="line-label">Sonraki Yenileme</span>
-                <span class="file-size">{{ Auth::user()->subscription?->ends_at?->translatedFormat('d F Y') ?? 'Süresiz' }}</span>
+                <span class="file-size">
+                    @if(Auth::user()->plan?->is_default)
+                        Varsayılan Plan
+                    @elseif(Auth::user()->subscription?->ends_at)
+                        {{ Auth::user()->subscription->ends_at->translatedFormat('d F Y') }}
+                    @else
+                        Süresiz
+                    @endif
+                </span>
               </div>
 
               @php

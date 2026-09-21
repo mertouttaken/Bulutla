@@ -41,4 +41,22 @@ class Subscription extends Model
         return static::where('status', '!=', 'active')
             ->where('ends_at', '<=', now()->subDays(30));
     }
+    public function cancel(): bool
+    {
+        $this->status = 'canceled';
+        $this->ends_at = now();
+        $saved = $this->save();
+
+        if ($saved) {
+            $defaultPlan = Plan::where('is_default', true)->first();
+
+            if ($defaultPlan) {
+                $this->user->update([
+                    'plan_id' => $defaultPlan->id,
+                ]);
+            }
+        }
+
+        return $saved;
+    }
 }

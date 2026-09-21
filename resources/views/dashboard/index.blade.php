@@ -442,12 +442,18 @@
       <div class="metric-head">
         <span class="metric-title">Abonelik Planı</span>
         <span class="metric-badge metric-badge-success">
-          {{ $user->subscription?->status === 'active' ? 'Aktif' : 'Standart' }}
+          {{ $user->subscription?->status === 'active' ? 'Aktif' : 'Pasif' }}
         </span>
       </div>
-      <p class="metric-value">{{ $user->plan?->name ?? 'Başlangıç' }}</p>
+      @php
+        $user = Auth::user();
+        $end_at = $user->subscription?->ends_at;
+        $diff = $end_at ? now()->diffInDays($end_at) : 0;
+        $percent = $diff/30*100;
+      @endphp
+      <p class="metric-value">{{ $user->plan?->name ?? 'Default' }}</p>
       <div class="metric-progress">
-        <div class="metric-progress-fill" style="width: 100%;"></div>
+        <div class="metric-progress-fill" style="width: {{ $percent }}%;"></div>
       </div>
       <div class="metric-footer">
         <span>{{ $user->plan?->price ?? 0 }} ₺ / ay</span>
