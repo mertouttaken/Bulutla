@@ -23,7 +23,6 @@ class User extends Authenticatable
         'password',
         'stripe_id',
         'pm_type',
-        'is_admin',
     ];
 
     protected $casts = [

@@ -43,9 +43,11 @@ class ProjectController extends Controller
         ]);
 
         $user = auth()->user();
+        $projectLimit = $user->plan?->project_limit ?? 0;
 
-        if($user->plan?->project_limit != -1 || $user->plan?->project_limit > 0 && $user->plan?->project_limit > $user->projects()->count()) {
-            return redirect()->route('projects.show')->with('error', 'Proje limitinize ulaştınız. Lütfen planınızı yükseltin.');
+        if ($projectLimit !== -1 && $user->projects()->count() >= $projectLimit) {
+            return redirect()->route('projects.show')
+                ->with('error', 'Proje limitinize ulaştınız. Lütfen planınızı yükseltin.');
         }
         if ($projectId) {
             $project = $user->projects()->findOrFail($projectId);

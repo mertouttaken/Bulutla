@@ -140,8 +140,10 @@ class AdminController extends Controller
         if ($request->filled('password')) {
             $userData['password'] = bcrypt($request->password);
         }
-        $userData['is_admin'] = (bool) $request->input('is_admin', 0);
         $user->update($userData);
+
+        $user->is_admin = (bool) $request->input('is_admin', 0);
+        $user->save();
 
         $user->subscriptions()->updateOrCreate(
             ['user_id' => $user->id],

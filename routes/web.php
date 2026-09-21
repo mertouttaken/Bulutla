@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware('admin')->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/plans', [AdminController::class, 'plans_index'])->name('admin.plans.index');
     Route::get('/admin/actions', [AdminController::class, 'actions'])->name('admin.plans.actions');

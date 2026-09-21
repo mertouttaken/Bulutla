@@ -12,7 +12,7 @@ class EnsureUserIsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (!$request->user() || !$request->user()->is_admin) {
-            return redirect('home');
+            abort(403, 'Bu sayfaya erişim yetkiniz yok.');
         }
  
         return $next($request);
