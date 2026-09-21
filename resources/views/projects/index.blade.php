@@ -456,7 +456,7 @@
       <p>Oyun haritalarını, eklenti paketlerini ve yapılandırmalarını kolayca organize et.</p>
     </div>
 
-    @if((int)(Auth::user()->plan?->project_limit ?? 0) > Auth::user()->projects()->count())
+    @if(Auth::user()->plan?->project_limit == -1 || Auth::user()->plan?->project_limit > 0 && Auth::user()->plan?->project_limit > Auth::user()->projects()->count())
       <button type="button" onclick="document.getElementById('newProjectModal').style.display = 'flex'" class="btn-cta-primary">
         <span>+</span> Yeni Proje Oluştur
       </button>
