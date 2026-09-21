@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\File;
+use Illuminate\Support\Facades\DB;
+
 class FileController extends Controller
 {
     public function upload(Request $request)
@@ -32,9 +34,12 @@ class FileController extends Controller
         $uploadedFile = $request->file('file');
         $fileSizeMB = $uploadedFile->getSize() / 1048576;
 
-        if (($user->storageUsedValue() + $fileSizeMB) >= $storageLimitMB) {
-            return back()->with('error', 'Depolama limitiniz doldu. Lütfen planınızı yükseltin.');
-        }
+        DB::transaction(function () use ($user, $fileSizeMB, $storageLimitMB) {
+            $user->lockForUpdate();
+            if (($user->storageUsedValue() + $fileSizeMB) >= $storageLimitMB) {
+                throw new \Exception('Depolama alanı yetersiz!');
+            }
+        });
 
         $path = $uploadedFile->store("files/{$user->id}/{$project->id}", 'local');
 
