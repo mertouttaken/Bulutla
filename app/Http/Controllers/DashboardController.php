@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Plan;
-use App\Models\Subscription;
-use App\Models\User;
-use App\Models\File as FileModel;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+
 class DashboardController extends Controller
 {
     public function index()
     {
         $mostPopularPlan = Plan::getMostPopularPlan();
         $plans = Plan::orderBy('sort_order', 'asc')->get();
+
         return view('home', compact('mostPopularPlan', 'plans'));
     }
 

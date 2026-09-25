@@ -277,7 +277,7 @@
       </div>
     </div>
 
-    <form action="{{ route('files.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+    <form action="{{ route('files.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
       @csrf
 
       <input type="file" name="files[]" id="fileInput" multiple style="display: none;">

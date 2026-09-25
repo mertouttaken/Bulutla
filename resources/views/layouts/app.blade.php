@@ -199,6 +199,7 @@
         .section-head{flex-direction:column; align-items:flex-start;}
       }
     </style>
+    @livewireStyles
 </head>
 <body>
 
@@ -246,6 +247,7 @@
 
 <main>
     @yield('content')
+    {{ $slot ?? '' }}
 </main>
 
 <footer>
@@ -255,5 +257,6 @@
   </div>
 </footer>
 
+@livewireScripts
 </body>
 </html>
