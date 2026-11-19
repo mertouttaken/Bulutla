@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
-      /* Bulutla motion preference. Big motion is ON by default, even when the OS asks
-         for reduced motion; the footer switch turns it off and is remembered. The
-         shim runs before the scrollcraft engine reads matchMedia. */
+      /* Bulutla motion. Big motion is always ON, even when the OS asks for reduced
+         motion. The shim runs before the scrollcraft engine reads matchMedia. A
+         preference saved by the old footer switch is cleared. */
       (function () {
         var on = true;
-        try { on = localStorage.getItem('bulutla-motion') !== 'off'; } catch (e) {}
+        try { localStorage.removeItem('bulutla-motion'); } catch (e) {}
         var d = document.documentElement;
         d.setAttribute('data-motion', on ? 'on' : 'off');
         var mm = window.matchMedia.bind(window);
@@ -297,7 +297,6 @@
     <p class="foot-mark" aria-hidden="true">Bulutla<span>.</span></p>
     <div class="foot-bottom">
       <span>© 2026 Bulutla</span>
-      <button type="button" class="motion-switch" data-motion-switch aria-pressed="true">Animasyonlar: <b>Açık</b></button>
       <button type="button" class="foot-up" data-to-top>Yukarı çık <span aria-hidden="true">↑</span></button>
     </div>
   </div>
