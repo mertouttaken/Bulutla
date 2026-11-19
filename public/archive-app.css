@@ -133,7 +133,7 @@ html[data-motion="off"] ::view-transition-group(*), html[data-motion="off"] ::vi
    behind the sheets. The tag hangs on a string from the front cover's corner.
    Both live inside the folder planes, so they move with the folder. */
 .hx-copy { position: absolute; z-index: 7; left: var(--gutter); bottom: 9svh; display: grid; gap: 22px; max-width: 34rem; }
-.hx-copy .hx-lede { grid-area: 1 / 1; max-width: 38ch; color: var(--muted); font-size: clamp(1rem, 1.3vw, 1.18rem); line-height: 1.58; }
+.hx-copy .hx-lede { grid-area: 1 / 1; max-width: 38ch; color: var(--muted); font-size: clamp(.85rem, 1.105vw, 1.003rem); line-height: 1.58; }
 .hx-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; font-weight: 600; font-size: .94rem; }
 .hx-link { text-decoration: underline; text-underline-offset: 5px; }
 
@@ -141,7 +141,7 @@ html[data-motion="off"] ::view-transition-group(*), html[data-motion="off"] ::vi
 .tx { padding: clamp(40px, 7vw, 100px) 0 clamp(60px, 9vw, 130px); }
 .tx-grid { width: min(1240px, 90%); margin: auto; display: grid; grid-template-columns: .9fr 1.1fr; gap: 6%; align-items: center; }
 .tx-title { font-size: var(--t-title); line-height: .98; letter-spacing: -.055em; margin-bottom: 28px !important; }
-.tx-copy p { font: 500 clamp(1.15rem, 1.7vw, 1.5rem)/1.4 var(--font-head); color: var(--muted); padding: 12px 0; border-top: 1px solid var(--rule); }
+.tx-copy p { font: 500 clamp(.9775rem, 1.445vw, 1.275rem)/1.4 var(--font-head); color: var(--muted); padding: 12px 0; border-top: 1px solid var(--rule); }
 .tx-desk { position: relative; height: min(64svh, 560px); border-radius: 10px; background: radial-gradient(ellipse at 50% 40%, #2b2530, #1c191f 70%); border: 1px solid var(--rule); overflow: hidden; }
 .tx-file, .px-file { display: inline-flex; align-items: center; gap: 9px; white-space: nowrap; padding: 9px 13px 9px 9px; border-radius: 4px; background: #f4eedb; color: #36302a; font: 500 .86rem var(--font-body); box-shadow: 0 1px 0 #bfaf9f, 0 10px 20px #0a070c66; }
 .tx-file small, .px-file small { font: 700 .68rem/1 var(--font-mono); letter-spacing: .04em; padding: 5px 4px; background: #cdb3d8; color: #322138; clip-path: polygon(0 0, 76% 0, 100% 25%, 100% 100%, 0 100%); }
