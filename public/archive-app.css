@@ -291,8 +291,8 @@ html[data-motion="on"] .auth-stage { animation: folder-open 2.2s var(--ease-io) 
 .archive-site .header-left { align-items: flex-start; }
 .btn-cta-secondary, .btn-secondary, .btn-back, .btn-action, .action-btn, .btn-edit-plan, .btn-change-plan { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 15px; border-radius: 5px; border: 1px solid var(--rule); background: var(--surface); color: var(--paper); font: 600 .9rem var(--font-body); cursor: pointer; transition: color .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease); }
 :is(.btn-cta-secondary, .btn-secondary, .btn-back, .btn-action, .action-btn, .btn-edit-plan, .btn-change-plan):hover { color: var(--lilac); border-color: #6c5878; }
-.archive-site .btn-submit { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 13px 20px; border: 0; border-radius: 5px; background: #dac0ef; color: #271d2d; font: 600 .95rem var(--font-body); cursor: pointer; transition: background .2s var(--ease), transform .2s var(--ease); }
-.archive-site .btn-submit:hover { background: #ead2fa; }
+.archive-site .btn-submit { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 13px 20px; border: 0; border-radius: 5px; background: var(--lilac); color: #271d2d; font: 600 .95rem var(--font-body); cursor: pointer; transition: background .2s var(--ease), transform .2s var(--ease); }
+.archive-site .btn-submit:hover { background: #dcbdf3; }
 .archive-site .btn-submit:active, .archive-site .archive-primary:active { transform: translateY(1px); }
 .archive-site :is(.action-btn, .btn-action).btn-danger, .btn-danger-outline, .btn-danger-action, .btn-cancel { background: transparent; border: 1px solid #7c4a4a; color: #eaa59b; border-radius: 5px; padding: 10px 15px; font: 600 .9rem var(--font-body); cursor: pointer; display: inline-flex; gap: 8px; align-items: center; justify-content: center; }
 :is(.btn-danger-outline, .btn-danger-action, .btn-cancel, .action-btn.btn-danger):hover { background: #3a2224; color: #f6c2ba; }
@@ -537,8 +537,8 @@ html[data-motion="on"] .nav-ind.is-ready { transition: transform .5s var(--ease)
 .nav-admin::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--lilac); opacity: .55; transition: opacity .25s var(--ease); }
 .nav-admin:hover::before, .nav-admin.is-here::before { opacity: 1; }
 .nav-admin.is-here { color: var(--paper); }
-.nav-primary { margin-left: 4px; background: #dac0ef; color: #271d2d; font-weight: 600; }
-.nav-primary:hover { background: #ead2fa; color: #271d2d; }
+.nav-primary { margin-left: 4px; background: var(--lilac); color: #271d2d; font-weight: 600; }
+.nav-primary:hover { background: #dcbdf3; color: #271d2d; }
 .nav-primary span { display: inline-block; font-size: .8em; transition: transform .35s var(--ease); }
 .nav-primary:hover span { transform: translate(2px, -2px); }
 
@@ -711,6 +711,7 @@ html[data-motion="on"] .paper-card { animation: deal-in .7s var(--ease) backward
 html[data-motion="on"] .paper-card:nth-child(2) { animation-delay: 70ms; } html[data-motion="on"] .paper-card:nth-child(3) { animation-delay: 140ms; }
 html[data-motion="on"] .paper-card:nth-child(4) { animation-delay: 210ms; } html[data-motion="on"] .paper-card:nth-child(5) { animation-delay: 280ms; }
 html[data-motion="on"] .paper-card:nth-child(n+6) { animation-delay: 340ms; }
+
 
 /* motion OFF: nothing moves, everything is present */
 html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after { animation: none !important; }

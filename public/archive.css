@@ -53,8 +53,8 @@ body.archive-site {
 .archive-site .archive-exhibit figcaption {border-color:var(--rule)}
 .archive-site .archive-object {background-image:radial-gradient(#d5bfd71e .8px,transparent 1px)}
 .archive-site .archive-object::after {background:#070509;filter:blur(16px)}
-.archive-site .archive-primary,.archive-site .btn-cta-primary {background:#dac0ef;color:#271d2d;border:0}
-.archive-site .archive-primary:hover,.archive-site .btn-cta-primary:hover {background:#ead2fa}
+.archive-site .archive-primary,.archive-site .btn-cta-primary {background:var(--lilac);color:#271d2d;border:0}
+.archive-site .archive-primary:hover,.archive-site .btn-cta-primary:hover {background:#dcbdf3}
 .archive-site .archive-pricing,.archive-site .archive-account {background:#221f24;color:var(--paper)}
 .archive-site .archive-plan a,.archive-site .archive-plan button {color:var(--paper);border-color:#776780}
 .archive-site .archive-plan a:hover,.archive-site .archive-plan button:hover {background:#493852}
