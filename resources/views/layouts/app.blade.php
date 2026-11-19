@@ -273,7 +273,7 @@
       </div>
       <nav class="foot-cols" aria-label="Alt menü">
         <div>
-          <p class="foot-label">Ürün</p>
+          <p class="foot-label">Keşfet</p>
           <ul>
             <li><a href="{{ route('home') }}">Ana sayfa</a></li>
             <li><a href="{{ route('plans.index') }}">Planlar</a></li>
