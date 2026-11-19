@@ -15,6 +15,8 @@ use App\Livewire\Admin\SubscriptionList;
 use App\Livewire\Admin\SubscriptionDetail;
 use App\Livewire\Admin\UserList;
 use App\Livewire\Admin\UserEditForm;
+use App\Livewire\Admin\AdminStats;
+use App\Livewire\Subscriptions\Show;
 use App\Livewire\Projects\Index as ProjectList;
 use App\Livewire\Projects\CreateForm as ProjectCreateForm;
 use App\Livewire\Projects\FileManager as ProjectFileManager;
@@ -28,7 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::view('/subscriptions', 'subscriptions.show')->name('subscriptions.show');
+    Route::get('/subscriptions', Show::class)->name('subscriptions.show');
     Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

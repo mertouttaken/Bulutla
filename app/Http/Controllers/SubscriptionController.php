@@ -33,7 +33,20 @@ class SubscriptionController extends Controller
                 'ends_at' => now()->addMonth(),
             ]
         );
+        $request->user()->bills()->create([
+            'user_id' => $request->user()->id,
+            'plan_id' => $request->plan_id,
+            'amount' => $request->plan()->price,
+            'status' => 'paid',
+            'payment_method' => null,
+            'transaction_id' => null,
+        ]);
 
         return back()->with('success', 'Planınız başarıyla güncellendi.');
+    }
+    public function getBills(Request $request)
+    {
+        $bills = $request->user()->bills()->with('plan')->get();
+        return response()->json($bills);
     }
 }

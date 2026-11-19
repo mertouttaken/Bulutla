@@ -434,7 +434,7 @@
       </div>
       <div class="metric-footer">
         <span>Limit: {{ $projectLimit }} Proje</span>
-        <span>Durum: {{ $projectLimit - $projectUsed > 0 ? 'Müsait' : 'Limit Doldu' }}</span>
+        <span>Durum: {{ $projectLimit - $projectUsed > 0 ? 'Müsait' : 'Doldu' }}</span>
       </div>
     </div>
 

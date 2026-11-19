@@ -49,7 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Subscription::class)->latestOfMany();
     }
-
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
     public function currentPlan()
     {
         return $this->subscription?->plan;
