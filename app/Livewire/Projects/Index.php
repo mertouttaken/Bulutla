@@ -18,7 +18,10 @@ class Index extends Component
 
     public bool $showModal = false;
 
-    #[Validate('required|string|max:255', message: 'Lütfen bir proje adı girin.')]
+    #[Validate('required|string|max:255', message: [
+        'required' => 'Lütfen bir proje adı girin.',
+        'max' => 'Proje adı en fazla 255 karakter olabilir.',
+    ])]
     public string $name = '';
 
     public string $description = '';
@@ -76,7 +79,7 @@ class Index extends Component
         $user = Auth::user();
 
         $projects = $user->projects()
-            ->withCount('files')
+            ->with(['files' => fn ($query) => $query->select('id', 'project_id', 'original_name', 'size')->latest()->orderByDesc('id')])
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })

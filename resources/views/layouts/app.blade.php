@@ -1,12 +1,30 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Bulutla — Dosyalarınızı ve projelerinizi güvenle yönetin' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      /* Bulutla motion preference. Big motion is ON by default, even when the OS asks
+         for reduced motion; the footer switch turns it off and is remembered. The
+         shim runs before the scrollcraft engine reads matchMedia. */
+      (function () {
+        var on = true;
+        try { on = localStorage.getItem('bulutla-motion') !== 'off'; } catch (e) {}
+        var d = document.documentElement;
+        d.setAttribute('data-motion', on ? 'on' : 'off');
+        var mm = window.matchMedia.bind(window);
+        window.matchMedia = function (q) {
+          if (/prefers-reduced-motion\s*:\s*reduce/.test(q)) return mm(on ? 'not all' : 'all');
+          if (/prefers-reduced-motion\s*:\s*no-preference/.test(q)) return mm(on ? 'all' : 'not all');
+          return mm(q);
+        };
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ asset('scrollcraft/scrollcraft.css') }}">
     <style>
       :root{
         --bg:#FBFAF6;
@@ -199,47 +217,38 @@
         .section-head{flex-direction:column; align-items:flex-start;}
       }
     </style>
+    <link rel="stylesheet" href="{{ asset('archive.css') }}?v={{ filemtime(public_path('archive.css')) }}">
+    <link rel="stylesheet" href="{{ asset('archive-app.css') }}?v={{ filemtime(public_path('archive-app.css')) }}">
     @livewireStyles
 </head>
-<body>
+<body class="archive-site">
 
-<header class="site">
-  <nav class="wrap">
-    <a href="{{ route('home') }}" class="brand">
-      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-        <rect x="1" y="1" width="24" height="24" rx="7" fill="#2d103f" stroke="#5f1587" stroke-width="1.2"/>
-        <path d="M7 16a3.5 3.5 0 0 1-.5-6.96A5 5 0 0 1 16.1 7.2 4 4 0 0 1 19.5 12a3.5 3.5 0 0 1-.5 7H7z" stroke="#e2e8f0" stroke-width="1.5" stroke-linejoin="round"/>
-      </svg>
-      Bulutla
-    </a>
-    <ul class="nav-links">
-      <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Ana Sayfa</a></li>
-      <li><a href="{{ route('plans.index') }}" class="{{ request()->routeIs('plans.*') ? 'active' : '' }}">Planlar</a></li>
+<header class="site" data-site-header>
+  <nav class="wrap site-bar" aria-label="Ana menü">
+    <a href="{{ route('home') }}" class="brand">Bulutla</a>
+    <ul class="nav-links" data-nav-links>
+      <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}" @if(request()->routeIs('home')) aria-current="page" @endif>Ana Sayfa</a></li>
+      <li><a href="{{ route('plans.index') }}" class="{{ request()->routeIs('plans.*') ? 'active' : '' }}" @if(request()->routeIs('plans.*')) aria-current="page" @endif>Planlar</a></li>
       @auth
-        <li><a href="{{ route('subscriptions.show') }}" class="{{ request()->routeIs('subscriptions.*') ? 'active' : '' }}">Aboneliğim</a></li>
+        <li><a href="{{ route('subscriptions.show') }}" class="{{ request()->routeIs('subscriptions.*') ? 'active' : '' }}" @if(request()->routeIs('subscriptions.*')) aria-current="page" @endif>Aboneliğim</a></li>
       @endauth
+      <li class="nav-ind" aria-hidden="true"></li>
     </ul>
     <div class="nav-cta">
         @auth
-            @php
-                $user = Auth::user();
-                $isAdmin = $user->is_admin;
-            @endphp
-            @if ($isAdmin)
-                <a href="{{ route('admin.index') }}" class="btn btn-admin btn-sm">Admin Paneli</a>
+            @if (Auth::user()->is_admin)
+                <a href="{{ route('admin.index') }}" class="nav-admin {{ request()->routeIs('admin.*') ? 'is-here' : '' }}">Yönetim</a>
             @endif
-            <a href="{{ route('dashboard') }}" class="btn btn-panel btn-sm">Panel</a>
+            <a href="{{ route('dashboard') }}" class="nav-primary">Panel <span aria-hidden="true">↗</span></a>
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
-                <button type="submit" class="btn btn-ghost btn-sm">
-                    Çıkış yap
-                </button>
+                <button type="submit" class="nav-out">Çıkış yap</button>
             </form>
         @endauth
 
         @guest
-            <a href="{{ route('login') }}" class="btn btn-ghost btn-sm">Giriş yap</a>
-            <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Kayıt ol</a>
+            <a href="{{ route('login') }}" class="nav-out">Giriş yap</a>
+            <a href="{{ route('register') }}" class="nav-primary">Kayıt ol <span aria-hidden="true">↗</span></a>
         @endguest
     </div>
   </nav>
@@ -250,13 +259,53 @@
     {{ $slot ?? '' }}
 </main>
 
-<footer>
-  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
-    <span>© 2026 Bulutla</span>
-    <span>Bulutla</span>
+<footer class="site-foot" data-site-foot>
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div class="foot-lead">
+        <p class="foot-claim">Her dosya <em>yerinde.</em></p>
+        <p class="foot-sub">Projelerin, dosyaların ve kullandığın alan tek arşivde.</p>
+        @guest
+          <a href="{{ route('register') }}" class="nav-primary">Ücretsiz başla <span aria-hidden="true">↗</span></a>
+        @else
+          <a href="{{ route('projects.show') }}" class="nav-primary">Projelerime git <span aria-hidden="true">↗</span></a>
+        @endguest
+      </div>
+      <nav class="foot-cols" aria-label="Alt menü">
+        <div>
+          <p class="foot-label">Ürün</p>
+          <ul>
+            <li><a href="{{ route('home') }}">Ana sayfa</a></li>
+            <li><a href="{{ route('plans.index') }}">Planlar</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="foot-label">Hesap</p>
+          <ul>
+            @auth
+              <li><a href="{{ route('dashboard') }}">Panel</a></li>
+              <li><a href="{{ route('projects.show') }}">Projelerim</a></li>
+              <li><a href="{{ route('subscriptions.show') }}">Aboneliğim</a></li>
+            @else
+              <li><a href="{{ route('login') }}">Giriş yap</a></li>
+              <li><a href="{{ route('register') }}">Kayıt ol</a></li>
+            @endauth
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <p class="foot-mark" aria-hidden="true">Bulutla<span>.</span></p>
+    <div class="foot-bottom">
+      <span>© 2026 Bulutla</span>
+      <button type="button" class="motion-switch" data-motion-switch aria-pressed="true">Animasyonlar: <b>Açık</b></button>
+      <button type="button" class="foot-up" data-to-top>Yukarı çık <span aria-hidden="true">↑</span></button>
+    </div>
   </div>
 </footer>
 
 @livewireScripts
+<script src="{{ asset('scrollcraft/scrollcraft.js') }}"></script>
+<script src="{{ asset('archive-motion.js') }}?v={{ filemtime(public_path('archive-motion.js')) }}"></script>
+@stack('scripts')
 </body>
 </html>

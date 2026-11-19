@@ -172,182 +172,6 @@
       color: var(--neon-purple);
     }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 24px;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 20px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .project-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(192, 132, 252, 0.4), transparent 60%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    .project-card:hover {
-      background: var(--bg-card-hover);
-      transform: translateY(-4px);
-      border-color: rgba(192, 132, 252, 0.5);
-      box-shadow: 0 12px 35px rgba(95, 21, 135, 0.35);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .project-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(95, 21, 135, 0.3), rgba(139, 30, 196, 0.1));
-      border: 1px solid rgba(192, 132, 252, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--neon-purple);
-    }
-
-    .project-status {
-      background: rgba(139, 30, 196, 0.15);
-      border: 1px solid rgba(192, 132, 252, 0.25);
-      color: #d8b4fe;
-      font-size: 0.72rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      letter-spacing: 0.02em;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 99px;
-      background: #4ade80;
-      box-shadow: 0 0 8px #4ade80;
-    }
-
-    .project-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin: 0;
-      letter-spacing: -0.01em;
-    }
-
-    .project-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin: 6px 0 0 0;
-      line-height: 1.6;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 2.7em;
-    }
-
-    .card-metrics {
-      background: rgba(14, 15, 29, 0.6);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .metric-item {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .metric-item-label {
-      font-size: 0.68rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-    }
-
-    .metric-item-val {
-      font-size: 0.88rem;
-      color: #e2e8f0;
-      font-weight: 600;
-    }
-
-    .card-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 14px;
-    }
-
-    .btn-enter {
-      color: var(--neon-purple);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-    }
-
-    .btn-enter:hover {
-      color: #ffffff;
-      transform: translateX(3px);
-    }
-
-    .btn-delete {
-      background: transparent;
-      border: none;
-      color: #f87171;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s;
-    }
-
-    .btn-delete:hover {
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-    }
-
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -438,6 +262,30 @@
       text-align: center;
       padding: 40px 0;
     }
+.shelf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,285px),1fr));gap:28px}
+.shelf-project{min-width:0;--cover:#cbb0dd;--edge:#866b96;--letter:#34273e}
+.shelf-project:nth-child(3n+2){--cover:#aab9a6;--edge:#778674;--letter:#273629}
+.shelf-project:nth-child(3n){--cover:#d9b79c;--edge:#96765f;--letter:#382920}
+.shelf-object{height:250px;position:relative;perspective:1800px;isolation:isolate}
+.shelf-back{position:absolute;inset:20% 2% 2%;background:var(--edge);border-radius:6px}
+.shelf-back:before{content:"";position:absolute;bottom:99%;left:0;width:40%;height:14px;background:var(--edge);clip-path:polygon(0 0,85% 0,100% 100%,0 100%)}
+.shelf-pages{position:absolute;inset:3% 6% 33%;z-index:1;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#9f8d78 #eae3cc;background:#f4eedb;color:#36302a;border-radius:3px;border:1px solid #c7baa3;box-shadow:0 3px 0 #bfaf9f,0 5px 0 #e1d3bb,0 8px 15px #120e1844;transform:translateY(51%) scale(.97);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.is-open .shelf-pages{transform:translateY(0) scale(1)}
+.shelf-file,.shelf-upload{display:flex;align-items:center;gap:9px;padding:12px 10px;border-bottom:1px solid #cfc5ae;font-size:.88rem}.shelf-file span{overflow-wrap:anywhere;flex:1}.shelf-file small,.shelf-meta,.shelf-imprint,.shelf-foot{font:600 .68rem/1.4 var(--font-mono);letter-spacing:.035em}
+.shelf-file small{padding:3px;background:#e2d6bf;border-radius:2px}.shelf-file:hover,.shelf-file:focus-visible,.shelf-upload:hover{background:#e7d9c3}.shelf-empty{padding:15px 12px 0;margin:0}.shelf-upload{text-decoration:underline}
+.shelf-cover{cursor:pointer;text-align:left;color:var(--letter);position:absolute;z-index:2;inset:30% 0 0;width:100%;border-radius:7px;border:1px solid color-mix(in srgb,var(--cover),white 28%);background:linear-gradient(122deg,color-mix(in srgb,var(--cover),white 12%),var(--cover) 70%,color-mix(in srgb,var(--cover),black 8%));box-shadow:0 8px 16px #08060a40;display:flex;flex-direction:column;justify-content:space-between;padding:14px 18px;transform-origin:center bottom;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.is-open .shelf-cover{transform:rotateX(-63deg) scaleX(.96)}.shelf-cover strong{font:italic 500 clamp(1.8rem,3.5vw,3.2rem)/1 var(--font-head);letter-spacing:-.055em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.shelf-imprint,.shelf-foot,.shelf-actions{display:flex;align-items:center;justify-content:space-between}.shelf-imprint{border-bottom:1px solid #392c373f;padding-bottom:7px}
+.shelf-description{color:var(--ink);margin:14px 0 4px;overflow-wrap:anywhere}.shelf-meta{display:block;margin:8px 0;color:var(--ink-muted)}.shelf-actions{border-top:1px solid var(--border);padding:12px 0;font-size:.9rem}.shelf-actions a{color:#dbc3eb}.shelf-actions button{background:none;border:0;color:#deaeb1;cursor:pointer}
+.archive-site .projects-container .header-info h1{display:block;font:500 var(--t-title)/1 var(--font-head);letter-spacing:-.05em;margin:0}
+.shelf-motion{display:none !important}
+.archive-site .projects-container .projects-header,.archive-site .projects-container .filter-bar{background:transparent;box-shadow:none;border-color:var(--border)}
+.shelf-motion{display:none}
+@media(prefers-reduced-motion:reduce){
+  .shelf-motion{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;cursor:pointer}
+  .projects-container:not(:has(.shelf-motion input:checked)) :is(.shelf-cover,.shelf-pages){transition:none}
+}
+
   </style>
 
   <div class="projects-container">
@@ -455,19 +303,14 @@
 
     <div class="projects-header">
       <div class="header-info">
-        <h1>Proje Yönetimi</h1>
-        <p>Oyun haritalarını, eklenti paketlerini ve yapılandırmalarını kolayca organize et.</p>
+        <p class="desk-kicker">KİŞİSEL ARŞİV</p><h1 class="motion-title">Projelerim<span class="lilac-num">.</span></h1>
+        <p>Dosyalarını görmek için bir klasör aç.</p>
       </div>
 
       @if($user->plan?->project_limit == -1 || ($user->plan?->project_limit > 0 && $user->plan?->project_limit > $user->projects()->count()))
-        <div style="display: flex; gap: 10px;">
-          <button type="button" wire:click="openModal" class="btn-cta-primary">
-            <span>+</span> Hızlı Proje Aç
-          </button>
-          <a href="{{ route('projects.create') }}" class="btn-cta-secondary">
-            Detaylı Ekle
-          </a>
-        </div>
+        <button type="button" wire:click="openModal" class="btn-cta-secondary">
+          <span aria-hidden="true">+</span> Proje Ekle
+        </button>
       @endif
     </div>
 
@@ -482,118 +325,94 @@
                placeholder="Proje adıyla filtrele...">
       </div>
 
+      <label class="shelf-motion"><input type="checkbox" checked> Klasör animasyonunu göster</label>
       <div class="project-count-badge">
-        Toplam: <strong>{{ count($projects) }}</strong> Proje
+        Toplam: <strong data-tick>{{ count($projects) }}</strong> Proje
       </div>
     </div>
 
-    <div class="projects-grid">
+    <div class="shelf-grid">
       @forelse($projects as $project)
-        <div class="project-card">
-          <div style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="card-top">
-              <div class="project-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                </svg>
-              </div>
-              <div class="project-status">
-                <span class="status-dot"></span> Aktif
-              </div>
+        <article class="shelf-project" wire:key="folder-{{ $project->id }}" x-data="{ open: false }" :class="{ 'is-open': open }">
+          <div class="shelf-object">
+            <div class="shelf-back" aria-hidden="true"></div>
+            <div id="contents-{{ $project->id }}" class="shelf-pages" inert :inert="!open" aria-label="{{ $project->name }} dosyaları" role="region">
+              @forelse($project->files as $file)
+                <a class="shelf-file" href="{{ route('files.download', $file->id) }}" title="{{ $file->original_name }} dosyasını indir">
+                  <small>{{ strtoupper(substr(pathinfo($file->original_name, PATHINFO_EXTENSION), 0, 6)) ?: 'DOSYA' }}</small>
+                  <span>{{ $file->original_name }}</span><b aria-hidden="true">↓</b>
+                </a>
+              @empty
+                <p class="shelf-empty">Bu klasör boş.</p>
+                <a class="shelf-upload" href="{{ route('projects.files', $project->id) }}">İlk dosyayı yükle ↗</a>
+              @endforelse
             </div>
-
-            <div>
-              <h3 class="project-title">{{ $project->name }}</h3>
-              <p class="project-desc">{{ $project->description ?? 'Bu proje için bir açıklama girilmemiş.' }}</p>
-            </div>
-
-            <div class="card-metrics">
-              <div class="metric-item">
-                <span class="metric-item-label">Dosyalar</span>
-                <span class="metric-item-val">{{ $project->files_count }} Adet</span>
-              </div>
-
-              <div class="metric-item">
-                <span class="metric-item-label">Boyut</span>
-                <span class="metric-item-val" style="color: var(--neon-purple);">
-                  {{ method_exists($user, 'projectUsedID') ? number_format($user->projectUsedID($project->id) / 1048576, 2) : '0' }} MB
-                </span>
-              </div>
-
-              <div class="metric-item">
-                <span class="metric-item-label">Oluşturan</span>
-                <span class="metric-item-val" style="font-size: 0.82rem; color: #94a3b8;">
-                  {{ $project->user->name ?? $user->name }}
-                </span>
-              </div>
-
-              <div class="metric-item">
-                <span class="metric-item-label">Tarih</span>
-                <span class="metric-item-val" style="font-size: 0.82rem; color: #94a3b8;">
-                  {{ $project->created_at->format('d.m.Y') }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <a href="{{ route('projects.files', ['projectId' => $project->id]) }}" class="btn-enter">
-              <span>Dosyaları Yönet</span>
-              <span>→</span>
-            </a>
-
-            <button type="button" 
-                    wire:click="deleteProject({{ $project->id }})" 
-                    wire:confirm="Bu projeyi ve içerisindeki tüm dosyaları silmek istediğinize emin misiniz?" 
-                    class="btn-delete">
-              <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-              </svg>
-              <span>Sil</span>
+            <button class="shelf-cover" type="button" @click="open = !open" aria-controls="contents-{{ $project->id }}" :aria-expanded="open.toString()" aria-label="{{ $project->name }} klasörü">
+              <span class="shelf-imprint"><span>BULUTLA</span><span>{{ $project->created_at->format('d.m.Y') }}</span></span>
+              <strong>{{ $project->name }}</strong>
+              <span class="shelf-foot"><span>{{ $project->files->count() }} dosya</span><span x-text="open ? 'Kapat ↙' : 'Aç ↗'">Aç ↗</span></span>
             </button>
           </div>
-        </div>
+          @if($project->description)<p class="shelf-description">{{ $project->description }}</p>@endif
+          <small class="shelf-meta">{{ $user->name }} · {{ number_format($project->files->sum('size') / 1048576, 2) }} MB</small>
+          <div class="shelf-actions"><a href="{{ route('projects.files', $project->id) }}">Dosyaları yönet ↗</a>
+            <button type="button" wire:click="deleteProject({{ $project->id }})" wire:confirm="Bu projeyi ve içerisindeki tüm dosyaları silmek istediğinize emin misiniz?">Sil</button>
+          </div>
+        </article>
       @empty
-        <div class="empty-state">
-          <svg width="46" height="46" fill="none" stroke="#64748b" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-          </svg>
-          <h3 style="color:#fff; margin:10px 0 4px 0;">Henüz Kayıtlı Bir Proje Yok</h3>
-          <p style="color:#64748b; margin:0;">Yukarıdaki butona basarak ilk projeni oluşturabilirsin.</p>
-        </div>
+        @if($search)
+          <p class="shelf-none">Aramana uygun proje bulunamadı.</p>
+        @else
+          @if($user->plan?->project_limit == -1 || ($user->plan?->project_limit > 0 && $user->plan?->project_limit > $user->projects()->count()))
+            <button type="button" wire:click="openModal" class="shelf-slot">
+              <span class="shelf-slot__plus" aria-hidden="true">+</span>
+              <span class="shelf-slot__title">İlk projeni aç</span>
+              <small>Henüz klasörün yok.</small>
+            </button>
+          @else
+            <a href="{{ route('plans.index') }}" class="shelf-slot">
+              <span class="shelf-slot__plus" aria-hidden="true">↗</span>
+              <span class="shelf-slot__title">Plan seç</span>
+              <small>Proje açmak için bir plan gerekiyor.</small>
+            </a>
+          @endif
+        @endif
       @endforelse
     </div>
+
   </div>
 
   @if($showModal)
-    <div class="modal-overlay">
-      <div class="modal-container">
-        <div class="modal-header">
-          <h3>Yeni Proje Oluştur</h3>
-          <button type="button" wire:click="closeModal" class="modal-close-btn">✕</button>
+    <div class="modal-overlay fm-overlay" wire:keydown.escape.window="closeModal">
+      <form wire:submit="createProject" class="fm" role="dialog" aria-modal="true" aria-labelledby="fm-title">
+        <div class="fm-sheet">
+          <label for="pDesc" class="fm-label">Notlar <span>isteğe bağlı</span></label>
+          <textarea id="pDesc" wire:model="description" rows="3" placeholder="Proje içeriği, sürümü veya notlar…"></textarea>
         </div>
-
-        <form wire:submit="createProject" style="display: flex; flex-direction: column; gap: 16px; margin: 0;">
-          <div class="form-group">
-            <label for="pName">Proje Adı</label>
-            <input type="text" id="pName" wire:model="name" placeholder="Örn: Survival Paketi" class="form-control">
-            @error('name') <span style="color: #f87171; font-size: 0.76rem;">{{ $message }}</span> @enderror
+        <div class="fm-cover">
+          <div class="fm-rule">
+            <span>BULUTLA</span>
+            <span id="fm-title">YENİ KLASÖR</span>
+            <button type="button" wire:click="closeModal" class="fm-close" aria-label="Kapat">✕</button>
           </div>
-
-          <div class="form-group">
-            <label for="pDesc">Açıklama (İsteğe Bağlı)</label>
-            <textarea id="pDesc" wire:model="description" rows="3" placeholder="Proje içeriği, sürümü veya notlar..." class="form-control" style="resize: vertical; font-family: inherit;"></textarea>
+          <label for="pName" class="fm-sr">Proje adı</label>
+          <input type="text" id="pName" wire:model="name" class="fm-name" placeholder="Proje adı" autocomplete="off" maxlength="255" autofocus>
+          @error('name') <span class="fm-error">{{ $message }}</span> @enderror
+          <div class="fm-foot">
+            <span class="fm-meta">{{ now()->format('d.m.Y') }} · {{ $user->name }}</span>
+            <div class="fm-actions">
+              <button type="button" wire:click="closeModal" class="fm-cancel">Vazgeç</button>
+              <button type="submit" class="fm-submit" wire:loading.attr="disabled" wire:target="createProject">
+                <span wire:loading.remove wire:target="createProject">Klasörü oluştur</span>
+                <span wire:loading wire:target="createProject">Oluşturuluyor…</span>
+              </button>
+            </div>
           </div>
-
-          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
-            <button type="button" wire:click="closeModal" class="btn-cta-secondary" style="padding: 9px 16px;">Vazgeç</button>
-            <button type="submit" class="btn-cta-primary" style="padding: 9px 20px;">
-              <span wire:loading.remove wire:target="createProject">Oluştur</span>
-              <span wire:loading wire:target="createProject">Oluşturuluyor...</span>
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   @endif
 </div>
+
+
+
