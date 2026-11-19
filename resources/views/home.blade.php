@@ -159,7 +159,7 @@
   {{-- 6 CLOSE --}}
   <section class="cx" data-sc-act="flow" data-sc-drift="#141316" data-sc-spotlight aria-labelledby="cx-title">
     <div class="cx-inner" data-sc-in data-sc-stagger="80">
-      <div class="cx-folder" aria-hidden="true"><span>Senin klasörün</span><b>Hazır.</b></div>
+      <div class="cx-folder" aria-hidden="true"><span>Klasörün</span><b>Hazır.</b></div>
       <h2 id="cx-title" class="cx-title">Klasörün <em>hazır.</em></h2>
       <p>İlk projeni aç, ilk dosyanı bırak. Gerisini arşiv halleder.</p>
       @auth

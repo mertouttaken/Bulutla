@@ -7,7 +7,7 @@
           <div class="sheet sheet-notes"><small>MD · İLK NOT</small><b>Başlangıç</b><p>İlk projeni aç,<br>dosyalarını yerleştir.</p><i></i><i></i><strong>ilk-proje.md</strong></div>
           <div class="sheet sheet-colour"><small>ASE · PALET</small><div></div><strong>yeni-palet.ase</strong></div>
           <div class="sheet sheet-map"><small>PDF · PAFTA</small><div></div><b>Taslak</b><strong>taslak-01.pdf</strong></div>
-          <div class="folder-front"><div class="folder-rule"><span>BULUTLA</span><span>YENİ / 00</span></div><strong>Senin.</strong><div class="folder-label"><span>Boş klasör</span><i></i></div></div>
+          <div class="folder-front"><div class="folder-rule"><span>BULUTLA</span><span>YENİ / 00</span></div><strong>Arşiv.</strong><div class="folder-label"><span>Boş klasör</span><i></i></div></div>
         </div>
       </div>
       <figcaption>"Dosyaları ve kotaları tek ekrandan yönetmek ekibin işini inanılmaz hızlandırdı." <span>Bulutla kullanıcısı</span></figcaption>
