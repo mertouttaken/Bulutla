@@ -500,7 +500,7 @@ html[data-motion="on"] .plan-shelf .rx-card { animation: rise .8s var(--ease) ba
 .plans-page__head { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6%; align-items: end; padding-bottom: 30px; border-bottom: 1px solid var(--rule); margin-bottom: 64px; }
 .plans-page__head h1 { font: 500 var(--t-title)/.94 var(--font-head); letter-spacing: -.055em; margin: 0; }
 .plans-page__head h1 em { color: var(--lilac); }
-.plans-page__head > p { color: var(--muted); margin: 0; max-width: 38ch; line-height: 1.6; }
+.plans-page__head > p { color: var(--muted); margin: 0; font-size: 75%; height: 40%; line-height: 1.2; }
 .plan-shelf { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 56px 28px; }
 .plan-shelf .rx-card { flex: none; }
 .rx-card.is-current { outline: 2px solid var(--lilac); outline-offset: 4px; }

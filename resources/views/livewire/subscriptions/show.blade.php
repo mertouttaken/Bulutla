@@ -5,7 +5,7 @@
       <div class="sub-head">
         <div class="header-info">
           <p class="desk-kicker">HESAP / ABONELİK</p>
-          <h1 class="motion-title">Abonelik <em>dosyası.</em></h1>
+          <h1 class="motion-title">Abonelik <em>alanı.</em></h1>
           <p>Planın, kullandığın alan ve faturaların tek yerde.</p>
         </div>
         <a href="{{ route('plans.index') }}" class="btn-change-plan">Planı değiştir ↗</a>

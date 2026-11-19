@@ -82,7 +82,7 @@
         </div>
       </article>
     @empty
-      <p class="files-empty">Bu klasör henüz boş. İlk dosyanı yukarıdaki alana bırak.</p>
+      <p class="files-empty">Bu proje henüz boş. İlk dosyanı yukarıdaki alana bırak.</p>
     @endforelse
   </div>
 </div>
