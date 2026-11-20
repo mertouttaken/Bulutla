@@ -24,8 +24,10 @@
     @else
       @if($current === $plan->id)
         <a href="{{ route('subscriptions.show') }}">Aboneliğimi gör ↗</a>
+      @elseif(($allowChange ?? false) && (float) $plan->price <= 0)
+        <form method="POST" action="{{ route('change-plan') }}">@csrf<input type="hidden" name="plan_id" value="{{ $plan->id }}"><button type="submit">Bu plana geç ↗</button></form>
       @elseif($allowChange ?? false)
-        <form method="POST" action="{{ route('change-plan') }}">@csrf<input type="hidden" name="plan" value="{{ $plan->slug }}"><button type="submit">Bu plana geç ↗</button></form>
+        <span class="rx-soon">Ödeme yakında</span>
       @else
         <a href="{{ route('plans.index') }}">Planı incele ↗</a>
       @endif

@@ -274,10 +274,10 @@
 .shelf-file,.shelf-upload{display:flex;align-items:center;gap:9px;padding:12px 10px;border-bottom:1px solid #cfc5ae;font-size:.88rem}.shelf-file span{overflow-wrap:anywhere;flex:1}.shelf-file small,.shelf-meta,.shelf-imprint,.shelf-foot{font:600 .68rem/1.4 var(--font-mono);letter-spacing:.035em}
 .shelf-file small{padding:3px;background:#e2d6bf;border-radius:2px}.shelf-file:hover,.shelf-file:focus-visible,.shelf-upload:hover{background:#e7d9c3}.shelf-empty{padding:15px 12px 0;margin:0}.shelf-upload{text-decoration:underline}
 .shelf-cover{cursor:pointer;text-align:left;color:var(--letter);position:absolute;z-index:2;inset:30% 0 0;width:100%;border-radius:7px;border:1px solid color-mix(in srgb,var(--cover),white 28%);background:linear-gradient(122deg,color-mix(in srgb,var(--cover),white 12%),var(--cover) 70%,color-mix(in srgb,var(--cover),black 8%));box-shadow:0 8px 16px #08060a40;display:flex;flex-direction:column;justify-content:space-between;padding:14px 18px;transform-origin:center bottom;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-.is-open .shelf-cover{transform:rotateX(-63deg) scaleX(.96)}.shelf-cover strong{font:italic 500 clamp(1.8rem,3.5vw,3.2rem)/1 var(--font-head);letter-spacing:-.055em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.is-open .shelf-cover{transform:rotateX(-63deg) scaleX(.96)}.shelf-cover strong{font:italic 500 clamp(1.8rem,3.5vw,3.2rem)/1 var(--font-head);letter-spacing:-.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .shelf-imprint,.shelf-foot,.shelf-actions{display:flex;align-items:center;justify-content:space-between}.shelf-imprint{border-bottom:1px solid #392c373f;padding-bottom:7px}
 .shelf-description{color:var(--ink);margin:14px 0 4px;overflow-wrap:anywhere}.shelf-meta{display:block;margin:8px 0;color:var(--ink-muted)}.shelf-actions{border-top:1px solid var(--border);padding:12px 0;font-size:.9rem}.shelf-actions a{color:#dbc3eb}.shelf-actions button{background:none;border:0;color:#deaeb1;cursor:pointer}
-.archive-site .projects-container .header-info h1{display:block;font:500 var(--t-title)/1 var(--font-head);letter-spacing:-.05em;margin:0}
+.archive-site .projects-container .header-info h1{display:block;font:500 var(--t-title)/1 var(--font-head);letter-spacing:-.02em;margin:0}
 .shelf-motion{display:none !important}
 .archive-site .projects-container .projects-header,.archive-site .projects-container .filter-bar{background:transparent;box-shadow:none;border-color:var(--border)}
 .shelf-motion{display:none}

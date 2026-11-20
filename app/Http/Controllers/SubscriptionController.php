@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
@@ -22,27 +24,32 @@ class SubscriptionController extends Controller
     public function changeUserPlan(Request $request)
     {
         $request->validate([
-            'plan_id' => 'required|exists:plans,id',
+            'plan_id' => 'required|integer|exists:plans,id',
         ]);
 
-        $request->user()->subscriptions()->updateOrCreate(
-            ['user_id' => $request->user()->id],
-            [
-                'plan_id' => $request->plan_id,
-                'status'  => 'active',
-                'ends_at' => now()->addMonth(),
-            ]
-        );
-        $request->user()->bills()->create([
-            'user_id' => $request->user()->id,
-            'plan_id' => $request->plan_id,
-            'amount' => $request->plan()->price,
-            'status' => 'paid',
-            'payment_method' => null,
-            'transaction_id' => null,
-        ]);
+        $plan = Plan::findOrFail($request->integer('plan_id'));
 
-        return back()->with('success', 'Planınız başarıyla güncellendi.');
+        // There is no payment provider yet, so a user may only switch
+        // themselves to a free plan. Paid plans are assigned by an admin
+        // (or by a payment flow once one exists), never by this request.
+        if ((float) $plan->price > 0) {
+            return back()->with('error', 'Ücretli planlara geçiş için ödeme gerekiyor. Ödeme altyapısı hazır olana kadar yöneticiyle iletişime geçin.');
+        }
+
+        $user = $request->user();
+
+        DB::transaction(function () use ($user, $plan) {
+            $user->subscriptions()->updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'plan_id' => $plan->id,
+                    'status'  => 'active',
+                    'ends_at' => null,
+                ]
+            );
+        });
+
+        return back()->with('success', "Planınız {$plan->name} olarak güncellendi.");
     }
     public function getBills(Request $request)
     {

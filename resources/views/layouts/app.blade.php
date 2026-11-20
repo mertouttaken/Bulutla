@@ -6,7 +6,7 @@
     <title>{{ $title ?? 'Bulutla — Dosyalarınızı ve projelerinizi güvenle yönetin' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400..700&family=JetBrains+Mono:wght@500..700&display=swap" rel="stylesheet">
     <script>
       /* Bulutla motion. Big motion is always ON, even when the OS asks for reduced
          motion. The shim runs before the scrollcraft engine reads matchMedia. A
@@ -38,8 +38,8 @@
         --shadow:0 1px 2px rgba(23,27,61,.05), 0 14px 32px -20px rgba(23,27,61,.22);
         --danger:#77339c;
         --radius:14px;
-        --font-head:'Fraunces', Georgia, serif;
-        --font-body:'IBM Plex Sans', system-ui, sans-serif;
+        --font-head:'Instrument Serif', Georgia, serif;
+        --font-body:'Inter', system-ui, sans-serif;
       }
       @media (prefers-color-scheme: dark){
         :root:not([data-theme="light"]){
